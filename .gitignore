@@ -11,6 +11,8 @@ tmp/
 *.bak
 *.swp
 *~.nib
+*.pyc
+*.nja
 local.properties
 .classpath
 .settings/
