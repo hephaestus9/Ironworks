@@ -1,0 +1,156 @@
+from flask import jsonify, render_template, session
+
+from Ironworks.ironworks import serverTools, feedparser
+from Ironworks.ironworks.tools import *
+from Ironworks.modules_lib.plugin_models import application
+
+app = serverTools.getApp()
+RUNDIR = serverTools.getRunDir()
+appModel = application.Application()
+db = serverTools.getPrefsDb()
+
+
+def parseFeeds():
+    # Feeds
+
+    google_url = 'https://news.google.com/news?pz=1&cf=all&ned=us&siidp=a3761a02c7bb42a6b2f9e47806ce78c4bb0d&ict=ln&output=rss'
+    wallStreet_url = 'http://online.wsj.com/xml/rss/3_7014.xml'
+    techNews_url = "http://www.technewsworld.com/perl/syndication/rssfull.pl"
+    linuxNews_url = "http://www.linuxinsider.com/perl/syndication/rssfull.pl"
+
+    google_feeds = feedparser.parse(google_url)
+    wallStreet_feeds = feedparser.parse(wallStreet_url)
+    techNews_feeds = feedparser.parse(techNews_url)
+    linuxNews_feeds = feedparser.parse(linuxNews_url)
+    return google_feeds, wallStreet_feeds, techNews_feeds, linuxNews_feeds
+
+
+@app.route('/applications')
+def applications():
+    if 'username' in session:
+        global appModel
+        applications = appModel.getApplications("position")
+        new_tab = '1'  # get_setting_value('app_new_tab') == '1'
+        google, wallStreet, tech, linux = parseFeeds()
+
+        return render_template('home/applications.html',
+            applications=applications,
+            new_tab=new_tab,
+            googleFeed=google,
+            wallStreetFeed=wallStreet,
+            techNewsFeed=tech,
+            linuxNewsFeed=linux)
+
+    return render_template('index.html')
+
+
+@app.route('/xhr/add_application_dialog')
+def add_application_dialog():
+    if 'username' in session:
+        return add_edit_application_dialog()
+    else:
+        return
+
+
+@app.route('/xhr/edit_application_dialog/<application_id>')
+def edit_application_dialog(application_id):
+    if 'username' in session:
+        return add_edit_application_dialog(application_id)
+    else:
+        return
+
+
+def add_edit_application_dialog(application_id=None):
+    global appModel
+    app = None
+
+    rundir = RUNDIR + '/static/images/applications'
+
+    icons = get_file_list(
+        folder=rundir,
+        extensions=['.png', '.jpg'],
+        prepend_path=False,
+    )
+
+    if application_id:
+        try:
+            app = appModel.getAppById(application_id)
+        except:
+            pass
+    return render_template('xbmc/dialogs/add_edit_application_dialog.html',
+        application=app,
+        icons=icons,
+    )
+
+
+@app.route('/xhr/add_edit_application', methods=['POST'])
+def add_edit_application():
+    global appModel
+    if 'username' in session:
+        name = request.form['name']
+        url = request.form['url']
+        description = request.form['description']
+        image = request.form['image']
+        position = request.form['position']
+
+        if name == '' or url == '':
+            return jsonify({'status': 'error'})
+
+        if position == '':
+            position = None
+
+        if 'application_id' in request.form:
+            app = appModel.getAppById(request.form['application_id'])
+            app.name = name
+            app.url = url
+            app.description = description
+            app.image = image
+            app.position = position
+
+        else:
+            app = appModel.setApp(name,
+                                    url,
+                                    description,
+                                    image,
+                                    position)
+
+        return applications()
+    else:
+        return
+
+
+@app.route('/xhr/delete_application/<application_id>', methods=['POST'])
+def delete_application(application_id):
+    global appModel
+    if 'username' in session:
+        try:
+            app = appModel.getAppById(application_id)
+            db.delete(app)
+            db.commit()
+
+        except:
+            return jsonify({'status': 'error'})
+
+        return xhr_applications()
+    else:
+        return
+
+
+@app.route('/xhr/show_application/<application_id>')
+def show_application(application_id):
+    global appModel
+    if 'username' in session:
+        app = None
+        message = None
+
+        try:
+            app = appModel.getAppById(application_id)
+
+        except:
+            message = 'Could not display application page'
+
+        return render_template('application_window.html',
+            message=message,
+            application=app,
+        )
+    return render_template('index.html')

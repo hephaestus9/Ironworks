@@ -1,0 +1,14 @@
+# -*- coding: utf-8 -*-
+from flask import Flask, jsonify, render_template, request, session
+from Ironworks.ironworks.noneditable import *
+from Ironworks.ironworks.modules import *
+from Ironworks.ironworks import serverTools
+
+app = serverTools.getApp()
+
+
+@app.route('/feeds')
+def feeds():
+    if 'username' in session:
+        return render_template('feeds.html')
+    return 'You are not logged in'

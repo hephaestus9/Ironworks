@@ -1,0 +1,25 @@
+# -*- coding: utf-8 -*-
+from modules.index import *
+from modules.log import *
+from modules.updater import *
+
+from modules.admin.settings import *
+from Imodules.admin.settingsLogin import *
+from modules.home.latestNews import *
+from modules.house.house import *
+
+from modules.plugins.weather import *
+from modules.plugins.search import *
+from modules.plugins.xbmc_notify import *
+from modules.plugins.applications import *
+from modules.plugins.albums import *
+from modules.plugins.applications import *
+from modules.plugins.controls import *
+from modules.plugins.currently_playing import *
+from modules.plugins.feeds import *
+from modules.plugins.movies import *
+from modules.plugins.recently_added import *
+from modules.plugins.remote import *
+from modules.plugins.showrss import *
+from modules.plugins.torrentManager import *
+from modules.plugins.tv import *

@@ -1,0 +1,163 @@
+# -*- coding: utf-8 -*-
+#
+# All Emoncms code is released under the GNU Affero General Public License.
+# See COPYRIGHT.txt and LICENSE.txt.
+#
+# ---------------------------------------------------------------------
+# Emoncms - open source energy visualisation
+# Part of the OpenEnergyMonitor project:
+# http://openenergymonitor.org
+#
+from Ironworks.ironworks import serverTools
+from Ironworks.modules_lib.pyEMONCMS import cmsSettings
+
+
+class Input():
+
+    def __init__(self):
+        self.settings = serverTools.getCMSSettings()
+        if self.settings == None:
+            self.settings = cmsSettings.Settings()
+            serverTools.setCMSSettings(self.settings)
+        self.logger = serverTools.getLogger()
+        self.max_node_id_limit = 32
+
+    def check_node_id_valid(self, nodeid):
+        nodeid = int(nodeid)
+        if nodeid < self.max_node_id_limit:
+            return True
+        else:
+            return False
+
+    def create_input_by_node(self, userid, nodeid, name):
+        return self.settings.setInputByNode(userid, nodeid, name)
+
+    def input_exists_check(self, inputid):
+        return self.settings.checkInputId(inputid)
+
+    def set_input(self, userid, name, time, value, description=None, nodeid=None, processList=None):
+        self.settings.setInput(userid, name, time, value, description, nodeid, processList)
+
+    def set_timevalue(self, inputid, time, value):
+        self.settings.setTimeValue(inputid, time, value)
+
+    # used in conjunction with controller before calling another method
+    def belongs_to_user(self, userid, inputid):
+        return self.settings.belongsToUser(userid, inputid)
+
+    def set_processlist(self, inputid, processlist):
+        self.settings.setProcessList(inputid, processlist)
+
+    def set_fields(self, inputid, fields):
+        result = self.settings.setFields(inputid, fields)
+        if result:
+            return {'success': True, 'message': 'Field updated'}
+        return {'success': False, 'message': 'Field could not be updated'}
+
+    def add_process(self, userid, inputid, processid, arg):
+        # id | description | Arg type | function | No. of datafields if creating feed | Datatype | Header | Engine
+        process = self.settings.getProcess(processid)
+        processtype = process[2]                                       # Array position 1 is the processtype: VALUE, INPUT, FEED
+
+        if processtype == "VALUE":                                       # If arg type value
+            if arg == '':
+                return {'success': False, 'message': 'Argument must be a valid number greater or less than 0.'}
+            arg = float(arg)
+
+        if processtype == "INPUTID":                                    # If arg type input
+            if arg == '':
+                return {'success': False, 'message': 'Input does not exist!'}
+            arg = int(arg)
+
+        if processtype == "FEEDID":                                      # If arg type feed
+            if arg == '':
+                return {'success': False, 'message': 'Feed does not exist!'}
+            arg = int(arg)
+        if processtype == "NONE":                                        # If arg type none
+            arg = 0
+
+        processlist = self.settings.getProcessList(inputid)
+        if processlist:
+            processlist += ','
+        processlist += processid + ': ' + arg
+        self.set_processlist(inputid, processlist)
+
+        return {'success': True, 'message': 'Process added'}
+
+    #******
+    #* delete input process by index
+    #******
+    def delete_process(self, inputid, index):
+
+        success = False
+        index = index - 1  # Array is 0-based. Index from process page is 1-based.
+
+        # Load process list
+        processlist = self.settings.getProcessList(inputid)
+
+        # Delete process
+        if len(processlist) > index and processlist[index]:
+            self.settings.deleteProcess(processlist[index])
+            success = True
+
+        return success
+
+    #******
+    #* move_input_process - move process up/down list of processes by $moveby (eg. -1, +1)
+    #******
+    def move_process(self, inputid, index, moveby):
+        if moveby > 1 or moveby < -1:
+            return False  # Only support +/-1 (logic is easier)
+
+        processlist = self.settings.getProcessList(inputid)
+        index = index - 1  # Array is 0-based. Index from process page is 1-based.
+
+        newindex = index + moveby  # Calc new index in array
+        # Check if newindex is greater than size of processlist
+        if newindex > len(processlist) - 1:
+            newindex = len(processlist) - 1
+        # Check if newindex is less than 0
+        if newindex < 0:
+            newindex = 0
+
+        replace = processlist[newindex]  # Save entry that will be replaced
+        processlist[newindex] = processlist[index]
+        processlist[index] = replace
+
+        # Save new process list
+        self.settings.setProcessList(inputid, processlist)
+        return True
+
+    def reset_process(self, inputid):
+        self.set_processlist(inputid, "")
+
+    def get_inputs(self, userid):
+        return self.settings.getInputs(userid)
+
+    #-----------------------------------------------------------------------------------------------
+    # This public function gets a users input list, its used to create the input/list page
+    #-----------------------------------------------------------------------------------------------
+
+    def getList(self, userid):
+        return self.settings.getList(userid)
+
+    def get_name(self, inputid):
+        return self.settings.getProcessName(inputid)
+
+    def get_processlist(self, inputid):
+        return self.settings.getProcessList(inputid)
+
+    def get_last_value(self, inputid):
+        return self.settings.getProcessLastValue(inputid)
+
+    #-----------------------------------------------------------------------------------------------
+    # Gets the inputs process list and converts id's into descriptive text
+    #-----------------------------------------------------------------------------------------------
+
+    def delete(self, userid, inputid):
+        # Inputs are deleted permanentely straight away rather than a soft delete
+        # as in feeds - as no actual feed data will be lost
+        self.settings.deleteInput(userid, inputid)
+
+    def clean(self, userid):
+        return self.settings.cleanInputs(userid)

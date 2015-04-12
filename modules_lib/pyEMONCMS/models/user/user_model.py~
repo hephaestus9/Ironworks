@@ -1,0 +1,100 @@
+# -*- coding: utf-8 -*-
+#
+# All Emoncms code is released under the GNU Affero General Public License.
+# See COPYRIGHT.txt and LICENSE.txt.
+#
+# ---------------------------------------------------------------------
+# Emoncms - open source energy visualisation
+# Part of the OpenEnergyMonitor project:
+# http://openenergymonitor.org
+#
+from Ironworks.ironworks import serverTools
+from Ironworks.modules_lib.pyEMONCMS import cmsSettings
+
+class User():
+
+    def __init__(self):
+        self.settings = serverTools.getCMSSettings()
+        if self.settings == None:
+            self.settings = cmsSettings.Settings()
+            serverTools.setCMSSettings(self.settings)
+        self.logger = serverTools.getLogger()
+
+    #---------------------------------------------------------------------------------------
+    # Get by userid methods
+    #---------------------------------------------------------------------------------------
+
+    def get_convert_status(self, userid):
+        return self.settings.getConverStatus(userid)
+
+    def get_username(self, userid):
+        return self.settings.getUsername(userid)
+
+    def get_email(self, userid):
+        return self.settings.getEmail(userid)
+
+    def get_apikey_read(self, userid):
+        return self.settings.getAPIKeyRead(userid)
+
+    def get_apikey_write(self, userid):
+        return self.settings.getAPIKeyWrite(userid)
+
+    def get_lang(self, userid):
+        return self.settings.getLang(userid)
+
+    def get_timezone(self, userid):
+        return self.settings.getTimeZone(userid)
+
+    def get_location(self, userid):
+        return self.settings.getLocation(userid)
+
+    def get_bio(self, userid):
+        return self.settings.getBio(userid)
+
+    #---------------------------------------------------------------------------------------
+    # Get by other paramater methods
+    #---------------------------------------------------------------------------------------
+
+    def get_id(self, username):
+        return self.settings.getUserID(username)
+
+    #---------------------------------------------------------------------------------------
+    # Set by id methods
+    #---------------------------------------------------------------------------------------
+
+    def set_convert_status(self, userid, conversion):
+        self.settings.setConvertStatus(userid, conversion)
+
+    def set_user_lang(self, userid, lang):
+        self.settings.setUserLang(userid, lang)
+
+    def set_timezone(self, userid, timezone):
+        self.settings.setTimeZone(userid, timezone)
+
+    def set_username(self, userid, username):
+        self.settings.setUsername(userid, username)
+
+    def set_bio(self, userid, bio):
+        self.settings.setBio(userid, bio)
+
+    def set_location(self, userid, location):
+        self.settings.setLocation(userid, location)
+
+    def set_email(self, userid, email):
+        self.settings.setEmail(userid, email)
+
+    #---------------------------------------------------------------------------------------
+    # Special methods
+    #---------------------------------------------------------------------------------------
+
+    def get_user(self, userid):
+        return self.settings.getUser(userid)
+
+    def set_user(self, data):
+        self.settings.setUser(data)
+
+    def new_apikey_read(self, userid):
+        return self.settings.setAPIKeyRead(userid)
+
+    def new_apikey_write(self, userid):
+        return self.settings.setAPIKeyWrite(userid)

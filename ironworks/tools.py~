@@ -1,0 +1,268 @@
+# -*- coding: utf-8 -*-
+"""Util functions for different things. For example: format time or bytesize correct."""
+
+from flask import request, session
+#from functools import wraps
+from jinja2.filters import FILTERS
+import os
+from Ironworks.modules_lib.plugin_models.xbmcServer import XbmcServer
+from flask import send_file
+import StringIO
+import urllib
+import re
+import serverTools
+
+app = serverTools.getApp()
+logger = serverTools.getLogger()
+WEBROOT = serverTools.getWebroot()
+user = None
+db = None
+activeXbmcServer = None
+THREADS = serverTools.getThreads()
+
+
+def format_time(time):
+    """Format the time for the player info"""
+    formatted_time = ''
+
+    if time['hours'] > 0:
+        formatted_time += str(time['hours']) + ':'
+
+        if time['minutes'] == 0:
+            formatted_time += '00:'
+
+    formatted_time += '%0*d' % (2, time['minutes']) + ':'
+    formatted_time += '%0*d' % (2, time['seconds'])
+
+    return formatted_time
+
+
+def format_seconds(time):
+    hours = time / 3600
+    minutes = time / 60
+    seconds = time % 60
+    if time < 3600:
+        time = '%02d:%02d' % (minutes, seconds)
+    else:
+        time = '%02d:%02d:%02d' % (hours, minutes, seconds)
+
+    return time
+
+FILTERS['format_seconds'] = format_seconds
+
+
+def round_number(num):
+    if (num > 0):
+        return int(num + .5)
+    else:
+        return int(num - .5)
+
+FILTERS['round_number'] = round_number
+
+
+def format_number(num):
+    extension_list = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB']
+
+    for i in range(len(extension_list)):
+        base = 1024 ** i
+        if num / base < 1024:
+            return '%.2f' % (float(num) / base) + ' ' + extension_list[i]
+
+    return str(num) + ' bytes'
+
+
+def get_file_list(folder, extensions, prepend_path=True, prepend_path_minus_root=False):
+    filelist = []
+
+    for root, subFolders, files in os.walk(folder):
+        for file in files:
+            if os.path.splitext(file)[1] in extensions:
+                if prepend_path:
+                    filelist.append(os.path.join(root, file))
+                elif prepend_path_minus_root:
+                    full = os.path.join(root, file)
+                    partial = full.replace(folder, '')
+                    if partial.startswith('/'):
+                        partial = partial.replace('/', '', 1)
+                    elif partial.startswith('\\'):
+                        partial = partial.replace('\\', '', 1)
+
+                    filelist.append(partial)
+                else:
+                    filelist.append(file)
+
+    return filelist
+
+
+def convert_bytes(imgBytes, with_extension=True):
+    imgBytes = float(imgBytes)
+    if imgBytes >= 1099511627776:
+        terabytes = imgBytes / 1099511627776
+        size = '%.2f' % terabytes
+        extension = 'TB'
+    elif imgBytes >= 1073741824:
+        gigabytes = imgBytes / 1073741824
+        size = '%.2f' % gigabytes
+        extension = 'GB'
+    elif imgBytes >= 1048576:
+        megabytes = imgBytes / 1048576
+        size = '%.2f' % megabytes
+        extension = 'MB'
+    elif imgBytes >= 1024:
+        kilobytes = imgBytes / 1024
+        size = '%.2f' % kilobytes
+        extension = 'KB'
+    else:
+        size = '%.2f' % imgBytes
+        extension = 'B'
+
+    if with_extension:
+        size = '%s%s' % (size, extension)
+        return size
+
+    return size, extension
+
+FILTERS['convert_bytes'] = convert_bytes
+
+
+def epochTime(seconds):
+    """Convert the time expressed by 'seconds' since the epoch to string"""
+    import time
+    return time.ctime(seconds)
+
+FILTERS['time'] = epochTime
+
+
+def download_image(image, file_path):
+    """Download image file"""
+    try:
+        logger.log('Creating file %s' % file_path, 'INFO')
+        downloaded_image = file(file_path, 'wb')
+    except:
+        logger.log('Failed to create file %s' % file_path, 'ERROR')
+        THREADS.pop()
+
+    try:
+        logger.log('Downloading %s' % image, 'INFO')
+        image_on_web = urllib.urlopen(image)
+        while True:
+            buf = image_on_web.read(65536)
+            if len(buf) == 0:
+                break
+            downloaded_image.write(buf)
+        downloaded_image.close()
+        image_on_web.close()
+    except:
+        logger.log('Failed to download %s' % image, 'ERROR')
+
+    THREADS.pop()
+
+    serverTools.setThreads(THREADS)
+    return
+
+
+@app.route('/cache/image_file/<type>/<path:file_path>/')
+@app.route('/cache/image_url/<path:file_path>/')
+def file_img_cache(file_path, type=None):
+    if 'username' in session:
+        if not type:
+            file_path = 'http://' + file_path
+            file_path = StringIO.StringIO(urllib.urlopen(file_path).read())
+
+        elif type == 'unix':
+            file_path = '/' + file_path
+        return send_file(file_path, mimetype='image/jpeg')
+    else:
+        return
+
+
+def create_dir(dir):
+    if not os.path.exists(dir):
+        try:
+            logger.log('Creating dir %s' % dir, 'INFO')
+            os.makedirs(dir)
+        except Exception as e:
+            logger.log('Problem creating dir %s' % dir, 'ERROR')
+            logger.log(e, 'DEBUG')
+
+
+def natural_sort(list, key=lambda s: s):
+    """
+    Sort a list into natural alphanumeric order.
+    """
+    def get_alphanum_key_func(key):
+        convert = lambda text: int(text) if text.isdigit() else text
+        return lambda s: [convert(c) for c in re.split('([0-9]+)', key(s))]
+
+    sort_key = get_alphanum_key_func(key)
+    return list.sort(key=sort_key)
+
+
+#XBMC-------------------------------------------------------------------------------------------------------
+@app.route('/xhr/xbmc_image/<label>/<version>/')
+def xbmc_proxy(version, label):
+    """Proxy XBMC image to make it accessible from external networks."""
+    from ironworks.noneditable import server_address
+    url = request.args['path']
+
+    if label != 'default':
+        server = XbmcServer.query.filter(XbmcServer.label == label).first()
+        xbmc_url = 'http://'
+
+        if server.username and server.password:
+            xbmc_url += '%s:%s@' % (server.username, server.password)
+
+        xbmc_url += '%s:%s' % (server.hostname, server.port)
+
+    else:
+        xbmc_url = server_address()
+
+    if version == 'eden':
+        url = '%s/vfs/special://%s' % (xbmc_url, url)
+    elif version == 'frodo':
+        url = '%s/image/image://%s' % (xbmc_url, urllib.quote(url.encode('utf-8'), ''))
+
+    img = StringIO.StringIO(urllib.urlopen(url).read())
+    return send_file(img, mimetype='image/jpeg')
+
+
+def youtube_to_xbmc(url):
+    x = url.find('?v=') + 3
+    youtubeID = url[x:]
+    return 'plugin://plugin.video.youtube/?action=play_video&videoid=' + youtubeID
+
+
+def xbmc_image(url, label='default'):
+    """Build xbmc image url"""
+    if url.startswith('special://'):  # eden
+        return '%s/xhr/xbmc_image/%s/eden/?path=%s' % (WEBROOT, label, url[len('special://'):])
+
+    elif url.startswith('image://'):  # frodo
+        url = url[len('image://'):]
+        url = urllib.quote(url.encode('utf-8'), '')
+
+        return '%s/xhr/xbmc_image/%s/frodo/?path=%s' % (WEBROOT, label, url)
+    else:
+        return url
+
+FILTERS['xbmc_image'] = xbmc_image
+
+
+def setXbmcServer(server):
+    global activeXbmcServer
+    prefs = preferences.Prefs()
+
+
+@app.teardown_request
+def shutdown_session(exception=None):
+    """This function is called as soon as a session is shutdown and makes sure, that the db session is also removed."""
+    #from ironworks.database import db_session
+    #db_session.remove()
+    pass
+
+
+@app.context_processor
+def utility_processor():
+    def webroot_url(url=''):
+        return WEBROOT + url
+    return dict(webroot_url=webroot_url)
