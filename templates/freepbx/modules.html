@@ -1,0 +1,66 @@
+{% extends "freepbx/freepbx.html" %}
+
+{% block content2 %}
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+
+                    <div id="accordion" style="width: 750px;">
+                      <div class="group">
+                        <h3>Basic</h3>
+                        <div>
+
+                        </div>
+                      </div>
+                      <div class="group">
+                        <h3>Extended</h3>
+                        <div>
+
+                        </div>
+                      </div>
+                      <div class="group">
+                        <h3>Unsupported</h3>
+                        <div>
+
+                        </div>
+                      </div>
+                      <div class="group">
+                        <h3>Commercial</h3>
+                        <div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                    <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box" style="height:30px">
+                      <input id="module_check" type="submit" value="Check Online" class="btn btn-info" style="width:40%;float:left"/>
+                      <input id="module_update" type="submit" value="Update Modules" class="btn btn-info" style="width:40%;float: right"/>
+                    </div>
+                    <div class="box" style="height:30px">
+                      <input id="module_reset" type="submit" value="Reset" class="btn btn-info" style="width:40%;float:left"/>
+                      <input id="module_process" type="submit" value="Process" class="btn btn-info" style="width:40%;float: right"/>
+                    </div>
+                    <div class="box">
+                        <a href="http://www.freepbx.org/" target="_blank">
+                        <img border="0" src="{{ url_for('static', filename='freePBX/images/freepbx_small.png') }}" width="100%">
+                        </a>
+                    </div>
+                    <div class="box" style="background:#fff">
+                        <a href="http://www.schmoozecom.com/" target="_blank">
+                        <img border="0" src="{{ url_for('static', filename='freePBX/images/schmooze-logo.png') }}" width="100%">
+                        </a>
+                    </div>
+                    <div class="box">
+                        <p> This software is built from <a href="http://www.freepbx.org/" target="_blank">freePBX</a> but is no way associated with FreePBX or <a href="http://www.schmoozecom.com/" target="_blank">Schmooze Com</a>.</p>
+                    </div>
+
+{% endblock %}

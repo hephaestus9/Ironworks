@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
+
+  <head>
+    <title>{% block page_title %}IRONWORKS{% endblock %}</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ironworks_logo.ico') }}" sizes="64x64" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/ironworks_logo.ico') }}" type="image/x-icon">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css" media="all" />
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='js/fancybox/jquery.fancybox-1.3.1.css') }}" type="text/css" media="all" />-->
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/dark-hive/jquery-ui.css" />
+
+
+
+    <!--[if IE 6]><script src="js/png-fix.js" type="text/javascript" charset="utf-8"></script><![endif]-->
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?ver=1.4.2"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/security/login.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/construction/verticalcenter.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/construction/functions.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/construction/main.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/security/forms.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/security/sha512.js') }}"></script>
+
+    <script type="text/javascript">
+    function processKey(e)
+    {
+        if (null == e)
+            e = window.event ;
+            if (e.keyCode == 13)  {
+                document.getElementById("login").click();
+                return false;
+            }
+    }
+    </script>
+
+    <script>
+      $(function() {
+        $( "#accordion").accordion({
+          collapsible: true,
+          heightStyle: "fill",
+          header: "> div > h3"
+        })
+        .sortable({
+        axis: "y",
+        handle: "h3",
+        stop: function( event, ui ) {
+          // IE doesn't register the blur when sorting
+          // so trigger focusout handlers to remove .ui-state-focus
+          ui.item.children( "h3" ).triggerHandler( "focusout" );
+        }
+        });
+      });
+
+      $(function() {
+        var tabs = $( "#tabs" ).tabs();
+        tabs.find( ".ui-tabs-nav" ).sortable({
+          axis: "x",
+          stop: function() {
+            tabs.tabs( "refresh" );
+          }
+        });
+      });
+
+      $(function() {
+        var tabs1 = $( "#tabs1" ).tabs();
+        tabs1.find( ".ui-tabs-nav" ).sortable({
+          axis: "x",
+          stop: function() {
+            tabs1.tabs1( "refresh" );
+          }
+        });
+      });
+
+      $(function() {
+        $( "input[type=submit]", "button")
+        .button()
+        .click(function( event ) {
+            event.preventDefault();
+          });
+      });
+
+      $(function() {
+        $( "#check1" ).button();
+        $( "#check2" ).button();
+        $( "#check3" ).button();
+        $( "#check4" ).button();
+        $( "#check5" ).button();
+        $( "#check6" ).button();
+        $( "#format" ).buttonset();
+        $( "#format1" ).buttonset();
+      });
+
+    </script>
+
+    <style>
+      #format { margin-top: 2em; }
+    </style>
+
+  </head>
+
+  <body id="page1" data-show_currently_playing="{{ show_currently_playing }}" data-search_enabled="{{ search_enabled }}">
+
+    <!-- fanart container -->
+
+    <div id="fanart" style="display: none;"></div>
+        <div id="wrapper">
+            <!--==============================header=================================-->
+              <div id="header">
+                <div class="header-bg">
+                  <div class="shell">
+
+
+                    {% block content1 %}
+                    {% endblock %}
+
+                    </div>
+                  </div>
+                  <div class="cl">&nbsp;</div>
+                </div>
+              </div>
+              <div id="footer-push" class="notext">&nbsp;</div>
+            </div>
+            <!--==============================footer=================================-->
+            <div id="footer">
+              <div class="copyright">
+                <p class="left"><a href="http://www.freepbx.org" target="_blank">FreePBX</a> is a registered trademark of <a href="http://www.freepbx.org/copyright.html" target="_blank"> Schmooze Com., Inc.</a><a style="padding-left: 180px;" href="http://www.freepbx.org/copyright.html" target="_blank">Copyright&copy; 2007-2015</a></p>
+                <p class="right">FreePBX {{ version }} is licensed under the <a href="http://www.gnu.org/copyleft/gpl.html" target="_blank"> GPL</a></p>
+                <div class="cl"></div>
+                <p class="left">Copyright &copy; 2013, Jeramy Brian, All Rights Reserved</p>
+                <p class="right"><a href="http://www.free-css.com/">Free CSS Templates</a> by <a href="http://chocotemplates.com">Chocotemplates.com</a></p>
+                <div class="cl"></div>
+                <p class="left">Powered by <a href="http://openenergymonitor.org">openenergymonitor.org</a><span> | v8.3.6</span></p>
+              </div>
+            </div>
+
+  </body>
+</html>

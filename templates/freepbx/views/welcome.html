@@ -1,0 +1,63 @@
+{% extends "freepbx/freepbx.html" %}
+
+{% block content2 %}
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <h2 class="title" style="color:white;">If you're new to FreePBX, Welcome. </h2>
+                      <h2 class="title" style="color:white;">Here are some quick instructions to get you started.</h2>
+                    </div>
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <div class="follow-item">
+                            <p style="color:white;opacity: 0.5;">There are a large number of Plug-in modules available from the Online Repository. This is available by clicking on the <a href="{{url_for('pyemon_api')}}">Tools menu</a> at the top, then <a href="{{url_for('pyemon_api')}}">Module Admin</a>, then <a href="{{url_for('pyemon_api')}}">Check for updates online</a>.  Modules are updated and patched often, so if you are having a problem, it's worth checking there to see if there's a new version of the module available. </p>
+                            <!--"config.php?type=tool
+                                "config.php?display=modules&amp;type=tool
+                                "config.php?display=modules&amp;type=tool&amp;extdisplay=online-->
+                      </div>
+                    </div>
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <div class="follow-item">
+                            <p style="color:white;opacity: 0.5;">If you're having any problems, you can also use the <a href="{{url_for('pyemon_api')}}">Online Support</a> module (<b>you need to install this through the <a href="{{url_for('pyemon_api')}}">Module Repository</a> first</b>) to talk to other users and the developers in real time. Click on <a href="{{url_for('pyemon_api')}}">Start IRC</a>, when the module is installed, to start a Java IRC client.</p>
+                            <!--"config.php?type=tool&amp;display=irc",
+                                "config.php?display=modules&amp;type=tool&amp;extdisplay=online",
+                                "config.php?type=tool&amp;display=irc&amp;action=start"-->
+                      </div>
+                    </div>
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <div class="follow-item">
+                            <p style="color:white;opacity: 0.5;">There is also a community based <a href="http://forums.freepbx.org" target='_new'>FreePBX Web Forum</a> where you can post questions and search for answers for any problems you may be having.</p>
+                            <!--"config.php?type=tool&amp;display=irc",
+                                "config.php?display=modules&amp;type=tool&amp;extdisplay=online",
+                                "config.php?type=tool&amp;display=irc&amp;action=start"-->
+                      </div>
+                    </div>
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <h2 class="title" style="color:white;">We hope you enjoy using FreePBX!</h2>
+                    </div>
+                  </div>
+                  <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box">
+                        <a href="http://www.freepbx.org/" target="_blank">
+                        <img border="0" src="{{ url_for('static', filename='freePBX/images/freepbx_small.png') }}" width="100%">
+                        </a>
+                    </div>
+                    <div class="box" style="background:#fff">
+                        <a href="http://www.schmoozecom.com/" target="_blank">
+                        <img border="0" src="{{ url_for('static', filename='freePBX/images/schmooze-logo.png') }}" width="100%">
+                        </a>
+                    </div>
+                    <div class="box">
+                        <p> This software is built from <a href="http://www.freepbx.org/" target="_blank">freePBX</a> but is no way associated with FreePBX or <a href="http://www.schmoozecom.com/" target="_blank">Schmooze Com</a>.</p>
+                    </div>
+
+
+
+
+{% endblock %}

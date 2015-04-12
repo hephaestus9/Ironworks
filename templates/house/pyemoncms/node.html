@@ -1,0 +1,381 @@
+{% extends "house/house.html" %}
+
+{% block content2 %}
+
+    <!--pyemoncms-->
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/themes/default/css/emon.css') }}" rel="stylesheet">
+
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/node/node.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/node/processlist.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/input/views/input.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/input/views/process_info.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/feed/feed.js') }}"></script>-->
+    <script src="{{ url_for('static', filename='pyemoncms/js/d3/d3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='pyemoncms/js/d3/d3.layout.js') }}"></script>
+    <style type="text/css">
+        .node circle {
+          cursor: pointer;
+          fill: #fff;
+          stroke: steelblue;
+          stroke-width: 1.5px;
+        }
+
+        .node text {
+          font-size: 10px;
+          //stroke: white;
+          fill: white;
+        }
+
+        path.link {
+          fill: none;
+          stroke: steelblue; //#ccc;
+          stroke-width: 1.5px;
+        }
+    </style>
+
+                    <div id="sub-nav">
+                      <ul>
+                        <li><a href="{{url_for('pyemon_user')}}">User</a></li>
+                        <li><a href="{{url_for('pyemon_myelectric')}}">My Electric</a></li>
+                        <li><a href="{{url_for('pyemon_node')}}"class="active">Node</a></li>
+                        <li><a href="{{url_for('pyemon_input')}}">Input</a></li>
+                        <li><a href="{{url_for('pyemon_vis')}}">Vis</a></li>
+                        <li><a href="{{url_for('pyemon_dashboard')}}">Dasboard</a></li>
+                        <li class="last"><a href="#">Extras</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li><a href="#">Log Out</a></li>
+                        <li class="last"><a href="{{url_for('pyemon_docs')}}">Docs</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <h2 class="title" style="color:white;">Nodes</h2>
+                      <div class="follow-item">
+                            <table class="table">
+                                <tr>
+                                    <td style="color:white;opacity: 0.5;">Input: Node(s)</td>
+                                </tr>
+                                <tr>
+                                    <td id="input_node" style="height:320px;"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <script type="text/javascript">
+                            var m = [30, 120, 3, 120],
+                                w = 666 - m[1] - m[3],
+                                h = 320 - m[0] - m[2],
+                                i = 0,
+                                root;
+
+                            var tree = d3.layout.tree()
+                                .size([h, w]);
+
+                            var diagonal = d3.svg.diagonal()
+                                .projection(function(d) { return [d.y, d.x]; });
+
+                            var vis = d3.select("#input_node").append("svg:svg")
+                                .attr("width", w + m[1] + m[3])
+                                .attr("height", h + m[0] + m[2])
+                              .append("svg:g")
+                                .attr("transform", "translate(" + m[0] + "," + m[0] + ")");
+
+                            d3.json("{{ url_for('static', filename='pyemoncms/js/d3/test/flare.json') }}", function(json) {
+                              root = json;
+                              root.x0 = h / 2;
+                              root.y0 = 0;
+
+                              function toggleAll(d) {
+                                if (d.children) {
+                                  d.children.forEach(toggleAll);
+                                  toggle(d);
+                                }
+                              }
+
+                              // Initialize the display to show a few nodes.
+                              root.children.forEach(toggleAll);
+                              toggle(root.children[1]);
+                              toggle(root.children[1].children[2]);
+                              toggle(root.children[9]);
+                              toggle(root.children[9].children[0]);
+
+                              update(root);
+                            });
+
+                            function update(source) {
+                              var duration = d3.event && d3.event.altKey ? 5000 : 500;
+
+                              // Compute the new tree layout.
+                              var nodes = tree.nodes(root).reverse();
+
+                              // Normalize for fixed-depth.
+                              nodes.forEach(function(d) { d.y = d.depth * 180; });
+
+                              // Update the nodes…
+                              var node = vis.selectAll("g.node")
+                                  .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+                              // Enter any new nodes at the parent's previous position.
+                              var nodeEnter = node.enter().append("svg:g")
+                                  .attr("class", "node")
+                                  .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+                                  .on("click", function(d) { toggle(d); update(d); });
+
+                              nodeEnter.append("svg:circle")
+                                  .attr("r", 1e-6)
+                                  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+                              nodeEnter.append("svg:text")
+                                  .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
+                                  .attr("dy", ".35em")
+                                  .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+                                  .text(function(d) { return d.name; })
+                                  .style("fill-opacity", 1e-6);
+
+                              // Transition nodes to their new position.
+                              var nodeUpdate = node.transition()
+                                  .duration(duration)
+                                  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+                              nodeUpdate.select("circle")
+                                  .attr("r", 4.5)
+                                  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+                              nodeUpdate.select("text")
+                                  .style("fill-opacity", 1);
+
+                              // Transition exiting nodes to the parent's new position.
+                              var nodeExit = node.exit().transition()
+                                  .duration(duration)
+                                  .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+                                  .remove();
+
+                              nodeExit.select("circle")
+                                  .attr("r", 1e-6);
+
+                              nodeExit.select("text")
+                                  .style("fill-opacity", 1e-6);
+
+                              // Update the links…
+                              var link = vis.selectAll("path.link")
+                                  .data(tree.links(nodes), function(d) { return d.target.id; });
+
+                              // Enter any new links at the parent's previous position.
+                              link.enter().insert("svg:path", "g")
+                                  .attr("class", "link")
+                                  .attr("d", function(d) {
+                                    var o = {x: source.x0, y: source.y0};
+                                    return diagonal({source: o, target: o});
+                                  })
+                                .transition()
+                                  .duration(duration)
+                                  .attr("d", diagonal);
+
+                              // Transition links to their new position.
+                              link.transition()
+                                  .duration(duration)
+                                  .attr("d", diagonal);
+
+                              // Transition exiting nodes to the parent's new position.
+                              link.exit().transition()
+                                  .duration(duration)
+                                  .attr("d", function(d) {
+                                    var o = {x: source.x, y: source.y};
+                                    return diagonal({source: o, target: o});
+                                  })
+                                  .remove();
+
+                              // Stash the old positions for transition.
+                              nodes.forEach(function(d) {
+                                d.x0 = d.x;
+                                d.y0 = d.y;
+                              });
+                            }
+
+                            // Toggle children.
+                            function toggle(d) {
+                              if (d.children) {
+                                d._children = d.children;
+                                d.children = null;
+                              } else {
+                                d.children = d._children;
+                                d._children = null;
+                              }
+                            }
+
+                     </script>
+                    </div>
+                        <!--<table class="table">
+
+                        <tbody id="nodes"></tbody>
+                        </table>
+
+                        <div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                          <div class="modal-header">
+                            <button type="button" class="close modal-exit">×</button>
+                            <br><h3 id="myModalLabel"><b>Node <span id="myModal-nodeid"></span>: <span id="myModal-variablename"></span></b> config:</h3>
+                          </div>
+
+                          <div class="modal-body">
+
+                            <p><?php echo _('Input processes are executed sequentially with the result being passed back for further processing by the next processor in the input processing list.'); ?></p>
+
+                            <div id="processlist-ui">
+                                <table id="process-table" class="table">
+
+                                    <tr>
+                                        <th style='width:5%;'></th>
+                                        <th style='width:5%;'><?php echo _('Order'); ?></th>
+                                        <th><?php echo _('Process'); ?></th>
+                                        <th><?php echo _('Arg'); ?></th>
+                                        <th></th>
+                                        <th><?php echo _('Actions'); ?></th>
+                                    </tr>
+
+                                    <tbody id="variableprocesslist"></tbody>
+
+                                </table>
+
+                                <table id="process-table" class="table">
+                                <tr><th>Add process:</th><tr>
+                                <tr>
+                                    <td>
+                                        <div class="input-prepend input-append">
+                                            <select id="process-select"></select>
+
+                                            <span id="type-value">
+                                                <input type="text" id="value-input" style="width:125px" />
+                                            </span>
+
+                                            <span id="type-input">
+                                                <select id="input-select" style="width:140px;"></select>
+                                            </span>
+
+                                            <span id="type-feed">
+                                                <select id="feed-select" style="width:140px;"></select>
+
+                                                <input type="text" id="feed-name" style="width:150px;" placeholder="Feed name..." />
+
+                                                <span class="add-on feed-engine-label">Feed engine: </span>
+                                                <select id="feed-engine">
+
+                                                <optgroup label="Recommended">
+                                                <option value=6 selected>Fixed Interval With Averaging</option>
+                                                <option value=5 >Fixed Interval No Averaging</option>
+                                                <option value=2 >Variable Interval No Averaging</option>
+                                                </optgroup>
+
+                                                <optgroup label="Other">
+                                                <option value=4 >PHPTIMESTORE (Port of timestore to PHP)</option>
+                                                <option value=1 >TIMESTORE (Requires installation of timestore)</option>
+                                                <option value=3 >GRAPHITE (Requires installation of graphite)</option>
+                                                <option value=0 >MYSQL (Slow when there is a lot of data)</option>
+                                                </optgroup>
+
+                                                </select>
+
+
+                                                <select id="feed-interval" style="width:130px">
+                                                    <option value="">Select interval</option>
+                                                    <option value=5>5s</option>
+                                                    <option value=10>10s</option>
+                                                    <option value=15>15s</option>
+                                                    <option value=20>20s</option>
+                                                    <option value=30>30s</option>
+                                                    <option value=60>60s</option>
+                                                    <option value=120>2 mins</option>
+                                                    <option value=300>5 mins</option>
+                                                    <option value=600>10 mins</option>
+                                                    <option value=1200>20 mins</option>
+                                                    <option value=1800>30 mins</option>
+                                                    <option value=3600>1 hour</option>
+                                                </select>
+
+                                            </span>
+                                            <button id="process-add" class="btn btn-info"><?php echo _('Add'); ?></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                  <td id="description"></td>
+                                </tr>
+                                </table>
+                            </div>
+
+
+                          </div>
+
+                          <div class="modal-footer">
+                            <button class="btn btn-primary modal-exit">Ok</button>
+                          </div>-->
+
+                  </div>
+
+                  <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box">
+                      <h2 class="title" style="color:white">My account</h2>
+                      <div class="follow-item">
+                        <p><span class="author">Username</span>:</p>
+                        <p>{{username}}</p>
+                        <a href="#">Switch User</a>
+                        <p>&nbsp;</p>
+                        <p><span class="author">Email</span>:</p>
+                        <p>{{email}}</p>
+                        <a href="#">Edit</a>
+                        <p>&nbsp;</p>
+                        <div id="edit-email-form" class="input-append" style="display:none">
+                                <input class="span2" type="text" style="width:150px">
+                                <button class="btn" type="button">Save</button>
+                        </div>
+                        <div id="change-email-error" class="alert alert-error" style="display:none; width:170px"></div>
+                        <p><span class="author">Write API Key</span>:</p>
+                        <p>{{writeKey}}</p>
+                        <a href="#">Generate New Key</a>
+                        <p>&nbsp;</p>
+                        <p><span class="author">Read API Key</span>:</p>
+                        <p>{{readKey}}</p>
+                        <a href="#">Generate New Key</a>
+                      </div>
+                    </div>
+{% endblock %}

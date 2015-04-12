@@ -1,0 +1,75 @@
+{% extends "freepbx/freepbx.html" %}
+
+{% block content2 %}
+    <!--pyemoncms-->
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/themes/default/css/emon.css') }}" rel="stylesheet">
+
+                <div id="sub-nav">
+                      <ul>
+                        <li><a href="{{url_for('pyemon_user')}}" class="active">User</a></li>
+                        <li><a href="{{url_for('pyemon_myelectric')}}">My Electric</a></li>
+                        <li><a href="{{url_for('pyemon_node')}}">Node</a></li>
+                        <li><a href="{{url_for('pyemon_input')}}">Input</a></li>
+                        <li><a href="{{url_for('pyemon_vis')}}">Vis</a></li>
+                        <li><a href="{{url_for('pyemon_dashboard')}}">Dasboard</a></li>
+                        <li class="last"><a href="#">Extras</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li><a href="#">Log Out</a></li>
+                        <li ><a href="{{url_for('pyemon_docs')}}">Docs</a></li>
+                        <li class="last"><a href="#">Original FreePBX</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <h2 class="title" style="color:white;">Warning: </h2>
+                    </div>
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <div class="follow-item">
+                            <p style="color:white;opacity: 0.5;">Cannot connect to Asterisk Manager with <i> {{ mgruser }} </i></p>
+                            <p style="color:white;opacity: 0.5;">Asterisk may not be running.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+
+
+
+{% endblock %}

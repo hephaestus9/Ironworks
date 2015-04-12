@@ -1,0 +1,17 @@
+{% extends "sickbeard/base.html" %}
+
+{% block sickbeard_content %}
+
+<div id="sb_search">
+  <div id="result" class="noscroll">
+    {% if data %}
+      <ul class="tablesorter">
+      {% for item in data %}
+        <li tvdbid="{{item.tvdbid}}">{{ item.name }} <span>{{item.first_aired}}</span></li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

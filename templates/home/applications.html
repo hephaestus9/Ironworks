@@ -1,0 +1,78 @@
+{% extends "home/home_base.html" %}
+
+{% block content2 %}
+
+  <link href="{{ url_for('static', filename='pyemoncms/themes/default/css/emon.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='xbmc/theme/css/font-awesome/font-awesome.css') }}" rel="stylesheet">
+
+
+                <div id="sub-nav">
+                      <ul>
+                        <li><a href="{{url_for('latestNews')}}" >Latest news</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">TV</a></li>
+                        <li><a href="#">Music</a></li>
+                        <li><a href="{{url_for('applications')}}" class="active">Applications</a></li>
+                        <li class="last"><a href="#">Weather</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                        <div id="applications" class="module" data-module="applications">
+                            <script type="text/javascript" src="{{ url_for('static', filename='js/home/popups.js') }}" charset="utf-8"></script>
+
+                              {% for application in applications %}
+                                <div class="box">
+                                    <div class="box-body">
+                                      <h2 class="title" style="color:white"><a class="clearfix" data-id="{{ application["id"] }}" title="Launch {{ application["name"] }}" href="{{ application["url"] }}"{% if new_tab %} target="_blank"{% endif %}>{{ application["name"] }}</a></h2>
+                                      {% if application["img"] %}<img src="{{ url_for('static', filename='images/applications/') }}{{ application["img"] }}" height="20" width="20">{% endif %}
+                                      {{ application["description"] }}
+                                      <a href="#" style="float:right; bottom:auto; padding:3px; padding-left: 6px; padding-right:0px; "><i class="icon-trash" title="Remove Link"></i></a>
+                                      <a href="#" style="float:right; bottom:auto; padding: 3px;padding-right:6px"><i class="icon-pencil" title="Edit Link" id="edit_application" data-id="{{ application["id"] }}"></i></a>
+                                    </div>
+                                    <div class="cl">&nbsp;</div>
+                                    <!--<a href="#" class="close notext">&nbsp;</a>-->
+                                </div>
+                                {% endfor %}
+                              <div class="box">
+                                <div class="box-body">
+                                  <div id="add_application" style="color: white">+ Add application</div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    <script>
+
+                    // add/edit application
+
+                      $(document).on('click', '#add_application', function() {
+                        $.get('/home_add_application_dialog', function(data) {
+                          var popup = $(data);
+                          $('body').append(popup);
+                          popup.showPopup({ dispose: true });
+                        });
+                      });
+
+                      $(document).on('click', '#edit_application', function() {
+                          console.log($(this).data('id'));
+                        $.get('/home_edit_application_dialog/' + $(this).data('id'), function(data) {
+                            console.log(data);
+                          var popup = $(data);
+                          $('body').append(popup);
+                          popup.showPopup({ dispose: true });
+                        });
+
+                      });
+
+                  </script>
+{% endblock %}

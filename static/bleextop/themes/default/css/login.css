@@ -1,0 +1,113 @@
+* {
+	margin:0;
+	padding:0;
+	outline:0;
+}
+html, body {
+	height:100%;
+}
+body {
+	font-size:12px;
+	line-height:18px;
+	font-family:Arial, Helvetica, Sans-Serif;
+	color:#bebebe; //#fff;
+	background:url(images/header-bg2.gif) no-repeat center 0, url(images/header-bg.gif) repeat-x 0 0, url(../../../resources/wallpapers/background.png) repeat;
+
+}
+
+#loading{
+	width:200px;
+	margin: auto; //150px
+	text-align:center;
+}
+
+#loading p{
+	font-size:0.9em;
+	color:#555;
+}
+
+#wrapper {
+	//background:url(images/bg2.gif) no-repeat center 0;
+	min-height:100%;
+	height:auto !important;
+	height:100%;
+	margin:0 auto -242px;
+}
+.shell {
+	width:1060px;
+	margin:0 auto;
+}
+#header {
+	background:url(images/header-bg.gif) repeat-x 0 0;
+}
+#header .header-bg {
+	background:url(images/header-bg2.gif) no-repeat center 0;
+}
+#navigation {
+	float:left;
+	display:inline;
+	padding-top:27px;
+	width:750px;
+	height:150px;
+}
+#navigation ul {
+	list-style:none outside none;
+}
+#navigation ul li {
+	float:left;
+	display:inline;
+	background:url(images/nav-divider.gif) no-repeat right 8px;
+	padding-right:10px;
+	margin-right:10px;
+}
+#navigation ul li a {
+	float:left;
+	display:inline;
+	color:#313131;
+	font-family:"Times New Roman", Arial, sans-serif;
+	text-transform:uppercase;
+}
+#navigation ul li a:hover, #navigation ul li a.active {
+	text-decoration:none;
+	font-weight:bold;
+}
+#a.subscribe {
+	float:left;
+	display:inline;
+	width:65px;
+	//background:url(images/ico-subscribe.gif) no-repeat right 3px;
+	color:#939393;
+	font-family:"Times New Roman", Arial, sans-serif;
+	margin:27px 0 0 80px;
+	padding-right:14px;
+	text-transform:uppercase;
+}
+.search {
+	float:left;
+	display:inline;
+	padding:26px 0 0 25px;
+}
+.search .field {
+	float:left;
+	display:inline;
+	border:1px solid #dfdfd3;
+	color:#bfbfae;
+	font-family:"Times New Roman", Arial, sans-serif;
+	text-transform:uppercase;
+	width:130px;
+	height:15px;
+	padding:2px 4px 3px;
+	background:#fff;
+}
+.search .search-btn {
+	float:left;
+	display:inline;
+	#background:none;
+	#border:0;
+	cursor:pointer;
+	text-decoration:underline;
+	text-transform:uppercase;
+	color:#939393;
+	font-family:"Times New Roman", Arial, sans-serif;
+	padding:1px 25px 1px 25px;
+}

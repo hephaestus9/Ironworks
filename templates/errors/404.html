@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+
+{% block content1 %}
+<!--
+        All Emoncms code is released under the GNU Affero General Public License.
+        See COPYRIGHT.txt and LICENSE.txt.
+
+        ---------------------------------------------------------------------
+        Emoncms - open source energy visualisation
+        Part of the OpenEnergyMonitor project:
+        http://openenergymonitor.org
+-->
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/js/jquery-1.9.0.min.js') }}"></script>
+    <script type="text/javascript" src="http://docs.sencha.com/extjs/4.2.1/extjs-build/ext-all.js"></script>
+
+
+                    <div id="navigation">
+                      <ul>
+                          <li class="last"><a href="{{url_for('latestNews')}}" >Home</a></li>
+                      </ul>
+                      <div class="cl">&nbsp;</div>
+                    </div>
+                    <!--<a href="#" class="subscribe">Subscribe</a>-->
+                    <!--<div class="search">
+                      <form action="#" method="post">
+                        <input type="text" class="field blink" value="Message" />
+                        <input type="submit" class="search-btn" value="Send!" />
+                      </form>
+                    </div>-->
+                    <div class="cl">&nbsp;</div>
+                    <!--<h1 id="logo" class="notext" style="width:150px;height:175px"><a href="http://www.maraschinoproject.com/">Maraschino</a></h1>
+                    <h1 id="banner">IRONWORKS</h1>-->
+                    <div class="cl">&nbsp;</div>
+
+    <!--pyemoncms-->
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/themes/default/css/emon.css') }}" rel="stylesheet">
+
+                    <div id="sub-nav">
+                      <ul>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                        <h2 class="title" style="color:white;">404 - Page Not Found</h2>
+                        <div class="follow-item">
+                            <p style="color:white;opacity: 0.5;">There is either no page here, or I broke the server during development.</p>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box">
+                      <h2 class="title" style="color:white">Pausible Causes for this message.</h2>
+                      <div class="follow-item">
+                        <p>I havn't created a page here.</p>
+                        <p>You are looking for pages that don't exist'.</p>
+                        <p>Most likely I created a problem during development.</p>
+                      </div>
+                    </div>
+                    <div class="box">
+                      <h2 class="title" style="color:white">Pausible solutions.</h2>
+                      <div class="follow-item">
+                        <p>Try again later.</p>
+                        <p>Send me an email.</p>
+                      </div>
+                    </div>
+                  </div>
+{% endblock %}

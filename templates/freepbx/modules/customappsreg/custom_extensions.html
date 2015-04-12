@@ -1,0 +1,54 @@
+{% extends "freepbx/freepbx.html" %}
+
+{% block content2 %}
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    <!-- This box will be for editing existing custom extensions -->
+                    <!--<div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <div class="follow-item">
+                            <p style="color:white;opacity: 0.5;"></p>
+                      </div>
+                    </div>-->
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <h2 class="title" style="color:white;">Add Custom Extension</h2>
+                      <div class="follow-item">
+                            <p style="color:white;opacity: 0.5;">Custom Extensions provides you with a facility to register any custom extensions or feature codes that you have created in a custom file and FreePBX doesn't otherwise know about them. This allows the Extension Registry to be aware of your own extensions so that it can detect conflicts or report back information about your custom extensions to other modules that may make use of the information. You should not put extensions that you create in the Misc Apps Module as those are not custom. </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box" style="height:380px">
+                      <div style="color:white;padding-top:2px; font-weight:bold;">Custom Extension: </div><br>
+                      <textarea id="cust_ext_name" style="width:95%;height:20px;"></textarea>
+                      <div style="color:white;padding-top:2px; font-weight:bold;">Description: </div><br>
+                      <textarea id="cust_ext_desc" style="width:95%;height:20px;"></textarea>
+                      <div style="color:white;padding-top:2px; font-weight:bold;">Notes: </div><br>
+                      <textarea id="cust_ext_notes" style="width:95%; height:120px;"></textarea>
+                      <input id="submit_extension" type="submit" value="Submit Changes" class="btn btn-info" style="width:40%;float:right"/>
+
+                    </div>
+                    <div class="box">
+                        <a href="http://www.freepbx.org/" target="_blank">
+                        <img border="0" src="{{ url_for('static', filename='freePBX/images/freepbx_small.png') }}" width="100%">
+                        </a>
+                    </div>
+                    <div class="box" style="background:#fff">
+                        <a href="http://www.schmoozecom.com/" target="_blank">
+                        <img border="0" src="{{ url_for('static', filename='freePBX/images/schmooze-logo.png') }}" width="100%">
+                        </a>
+                    </div>
+                    <div class="box">
+                        <p> This software is built from <a href="http://www.freepbx.org/" target="_blank">freePBX</a> but is no way associated with FreePBX or <a href="http://www.schmoozecom.com/" target="_blank">Schmooze Com</a>.</p>
+                    </div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends "house/house.html" %}
+
+{% block content2 %}
+
+    <!--pyemoncms-->
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/themes/default/css/emon.css') }}" rel="stylesheet">
+
+                    <div id="sub-nav">
+                      <ul>
+                        <li><a href="{{url_for('pyemon_user')}}">User</a></li>
+                        <li><a href="{{url_for('pyemon_myelectric')}}">My Electric</a></li>
+                        <li><a href="{{url_for('pyemon_node')}}">Node</a></li>
+                        <li><a href="{{url_for('pyemon_input')}}">Input</a></li>
+                        <li><a href="{{url_for('pyemon_vis')}}">Vis</a></li>
+                        <li><a href="{{url_for('pyemon_dashboard')}}">Dasboard</a></li>
+                        <li class="last"><a href="#">Extras</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li><a href="#">Log Out</a></li>
+                        <li class="last"><a href="#" class="active">Docs</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <h2 class="title" style="color:white;">Docs</h2>
+                        <div class="follow-item">
+                        <ul class="nav nav-tabs nav-stacked" style="padding-left: 0px;">
+                              <li class="nav-header" style="color:white;">Install & Upgrade</li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/master/readme.md">Github Ironworks Launch Page</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/master/docs/DebianInstall.md">Debian Installer (apt-get)</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/master/docs/LinuxInstall.md">Install on Linux (via git)</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/master/docs/SharedLinuxHostingInstall.md">Install on Linux Shared Hosting</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/master/docs/WindowsInstall.md">Install on Windows</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/master/docs/gettext.md">Using gettext on Ubuntu</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/master/docs/Upgrading.md">Upgrading</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/master/docs/Backup.md">Backup</a></li>
+
+                              <li class="nav-header" style="color:white;">Raspberry PI</li>
+
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/bufferedwrite/readme.md">Low write load version of emoncms for SD Cards (and harddrives)</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/development/tree/master/experimental/emon-py"><b>Concept:</b>EmonPy (Minimal emoncms for SD Cards written in python)</a></li>
+
+                              <li class="nav-header" style="color:white;">Beagle Bone Black</li>
+
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms/blob/bufferedwrite/readme.md">Low write load version of emoncms for SD Cards (and harddrives)</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/development/tree/master/experimental/emon-py"><b>Concept:</b>EmonPy (Minimal emoncms for SD Cards written in python)</a></li>
+
+                              <li class="nav-header" style="color:white;">Using Ironworks</li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/openenergymonitor/documentation/blob/master/Applications/HomeEnergyMonitor/HomeEnergyMonitor.md">Github: Home Energy Monitor - Example of input configuration using Wh accumulator + My Electric</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="http://openenergymonitor.org/emon/modules/emonTxV3">EmonTx v3: Example of configuring the inputs of the standard EmonTx v3 + My Electric</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="http://openenergymonitor.blogspot.co.uk/2014/08/monitoring-solarpv-heatpump-and-house.html">Blog post: Example of configuring the new emoncms bargraph visualisation that uses accumulating watt hour data</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="http://emoncms.org/site/docs/dashboards">An Example of more advanced custom dashboard setup</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="http://emoncms.org/site/docs/visualisations">A list with screenshots of available visualisations</a></li>
+
+                              <li class="nav-header" style="color:white;">Develop Ironworks</li>
+                              <li style="color:white;opacity: 0.5;"><a href="https://github.com/emoncms/emoncms#development">Development home</a></li>
+
+                              <li class="nav-header" style="color:white;">Ironworks.org</li>
+                              <li style="color:white;opacity: 0.5;"><a href="http://emoncms.org/site/home" >Home</a></li>
+                              <li style="color:white;opacity: 0.5;"><a href="http://emoncms.org/site/usage">Hosting your data on ironworks.org</a></li>
+                              <li class="nav-header" style="color:white;">Help</li>
+                              <li style="color:white;opacity: 0.5;"><a href="{{url_for('pyemon_api')}}">Input API helper</a></li>
+                            </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box">
+                      <h2 class="title" style="color:white">My account</h2>
+                      <div class="follow-item">
+                        <p><span class="author">Username</span>:</p>
+                        <p>{{username}}</p>
+                        <a href="#">Switch User</a>
+                        <p>&nbsp;</p>
+                        <p><span class="author">Email</span>:</p>
+                        <p>{{email}}</p>
+                        <a href="#">Edit</a>
+                        <p>&nbsp;</p>
+                        <div id="edit-email-form" class="input-append" style="display:none">
+                                <input class="span2" type="text" style="width:150px">
+                                <button class="btn" type="button">Save</button>
+                        </div>
+                        <div id="change-email-error" class="alert alert-error" style="display:none; width:170px"></div>
+                        <p><span class="author">Write API Key</span>:</p>
+                        <p>{{writeKey}}</p>
+                        <a href="#">Generate New Key</a>
+                        <p>&nbsp;</p>
+                        <p><span class="author">Read API Key</span>:</p>
+                        <p>{{readKey}}</p>
+                        <a href="#">Generate New Key</a>
+                      </div>
+                    </div>
+{% endblock %}
+
+
+
+    </div>
+    <div class="span9">
+
+    <div style="float:right;" class="input-append"><a class="btn btn-small" href="http://github.com/emoncms/docs/commits/master/.md">History</a><a class="btn btn-small btn-primary" href="http://github.com/emoncms/docs/blob/master/.md">Edit</a></div>
+    <br>
+    <div id="markdown">
+</div>
+    </div>
+  </div>
+</div>
+        </div>
+
+
+
+        <div style="clear:both; height:60px;"></div>
+        </div>
+
+        <div id="footer">
+            Powered by             <a href="http://openenergymonitor.org">openenergymonitor.org</a>
+            <span> | v8.3.5</span>
+        </div>
+
+        <script src="http://emoncms.org/Lib/bootstrap/js/bootstrap.js"></script>
+
+    </body>
+
+</html>

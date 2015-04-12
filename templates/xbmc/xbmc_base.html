@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+
+{% block content1 %}
+
+<!--//	License for all code of this FreePBX module can be found in the license file inside the module directory
+//	Copyright 2013 Schmooze Com Inc.
+//-->
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/js/jquery-1.9.0.min.js') }}"></script>
+    <script type="text/javascript" src="http://docs.sencha.com/extjs/4.2.1/extjs-build/ext-all.js"></script>
+
+                    <div id="navigation">
+                      <ul>
+                        <li><a href="{{url_for('latestNews')}}" >Home</a></li>
+                        <li><a href="{{url_for('xbmc_home')}}" class="active">XBMC</a></li>
+                        <li><a href="{{url_for('freePBX_welcome')}}">freePBX</a></li>
+                        <li><a href="{{url_for('pyemoncms_login')}}">Data Management</a></li>
+                        <li><a href="#">Finances</a></li>
+                        <li><a href="{{url_for('settingsLogin')}}">Admin</a></li>
+                        <li class="last"><a href="#">Site map</a></li>
+                      </ul>
+                      <div class="cl">&nbsp;</div>
+                    </div>
+                    <!--<a href="#" class="subscribe">Subscribe</a>-->
+                    <!--<div class="search">
+                      <form action="#" method="post">
+                        <input type="text" class="field blink" value="Message" />
+                        <input type="submit" class="search-btn" value="Send!" />
+                      </form>
+                    </div>-->
+                    <div class="cl">&nbsp;</div>
+                    <!--<h1 id="logo" class="notext" style="width:150px;height:175px"><a href="http://www.maraschinoproject.com/">Maraschino</a></h1>
+                    <h1 id="banner">IRONWORKS</h1>-->
+                    <div class="cl">&nbsp;</div>
+
+    <link href="{{ url_for('static', filename='pyemoncms/themes/default/css/emon.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='xbmc/theme/css/font-awesome/font-awesome.css') }}" rel="stylesheet">
+
+                <div id="sub-nav">
+                  <ul class="dropdown">
+                    <li><a href="#">Artists</a></li>
+                    <li><a href="#">Music</a>
+                      <ul>
+                        <li class="last"><a href="#">Recent</a></li>
+                        <li class="last"><a href="#">Recently Added</a></li>
+                        <li class="last"><a href="#">Recently Played</a></li>
+                        <li class="last"><a href="#" style="padding-right:20px">Genre</a></li>
+                        <li class="last"><a href="#" style="padding-right:20px">Years</a></li>
+                        <li class="last"><a href="#" style="padding-right:20px">Lists</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">Movies</a>
+                      <ul>
+                        <li class="last"><a href="#">Recently Added</a></li>
+                        <li class="last"><a href="#">All Movies</a></li>
+                        <li class="last"><a href="#" style="padding-right:20px">Genre</a></li>
+                        <li class="last"><a href="#">Years</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">TV Shows</a>
+                      <ul>
+                        <li class="last"><a href="#">Recently Added</a></li>
+                        <li class="last"><a href="#" style="padding-right:20px">All TV</a></li>
+                        <li class="last"><a href="#">Genre</a></li>
+                      </ul>
+                    </li>
+                    <li class="last"><a href="#" class="last">Files</a>
+                      <ul>
+                        <li class="last"><a href="#">Music</a></li>
+                        <li class="last"><a href="#">Video</a></li>
+                        <li class="last"><a href="#">Add On</a></li>
+                      </ul>
+                    </li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li><a href="#" class="active">XBMC</a></li>
+                    <li class="last"><a href="#">Local</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+
+                    <li><a href="http://{{ selected_server["hostname"] }}:{{ selected_server["port"] }}" target="_blank">{{ selected_server["label"] }}</a></li>
+                    <li><a href="#"><i class="fa fa-ellipsis-v" style="padding-top:9px"></i></a>
+                      <ul style="left:-129px">
+                        <li class="last" style="float:right"><a href="#">Current Playlist</a>
+                          <ul>
+                            <li class="last"><a href="#">Clear Playlist</a></li>
+                            <li class="last"><a href="#">Refresh Playlist</a></li>
+                            <li class="last"><a href="#">Party Mode</a></li>
+                          </ul>
+                        </li>
+                        <li class="last" style="float:right"><a href="#">Audio</a>
+                          <ul>
+                            <li class="last"><a href="#">Save Playlist</a></li>
+                            <li class="last"><a href="#">New Playlist</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="last"><a href="#"><i class="fa fa-cog" style="padding-top:9px"></i></a>
+                      <ul style="left:-109px">
+                        <li class="last" style="float:right"><a href="#">Manage</a>
+                          <ul>
+                            <li class="last"><a href="#">Misc Settings</a></li>
+                            <li class="last"><a href="#">View Log</a></li>
+                            <li class="last"><a href="#">Restart</a></li>
+                            <li class="last"><a href="#">Shutdown</a></li>
+                          </ul>
+                        </li>
+                        <li class="last" style="float:right; padding-right:15px;"><a href="#">Servers</a>
+                          <ul>
+                            {% for server in servers %}
+                              <li class="last" data-id="{{ server["id"] }}" style="width:130px"><a href="{{url_for('.xbmc_select_server', server_id=server["id"])}}" {% if server["active_server"] == "True" %} id="select_server" class="active" {% endif %}>{{ server["label"] }}</a>
+                                <a href="#" style="float:right; bottom:auto; padding:4px;"><i class="icon-trash" title="Remove Server"></i></a>
+                                <a href="#" style="float:right; bottom:auto; padding: 4px;"><i class="icon-pencil" title="Edit Server" id="edit_server" data-id="{{ server["id"] }}"></i></a>
+                              </li>
+                            {% endfor %}
+                            <li class="last" id="add_server"><a href="#">Add Server ...</a></li>
+                          </ul>
+                        </li>
+                        <li class="last" style="float:right"><a href="#">Library Editor</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+            </div>
+          </div>
+        </div>
+
+                    {% block content2 %}
+                    {% endblock %}
+
+{% endblock %}

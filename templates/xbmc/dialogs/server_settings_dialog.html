@@ -1,0 +1,45 @@
+<div id="add_edit_application_dialog" class="dialog"> <!--Fix this * I was lazy about the css -->
+  <div class="close" style="float:right;cursor:pointer;color:white;">x</div>
+  <h2>{% if server %}Edit{% else %}Add{% endif %} server</h2>
+
+  <form method="" action="">
+    {% if server %}
+      <input type="hidden" name="server_id" value="{{ server.id }}">
+    {% endif %}
+
+    <table class="table">
+        <tr><td>Label (required)</td>
+            <td><input id="id_server_label" class="required" name="label" type="text"{% if server %} value="{{ server.label }}"{% endif %}></td>
+        </tr>
+
+        <tr><td>Hostname / IP (required)</td>
+            <td><input id="id_server_hostname" class="required" name="hostname" type="text"{% if server %} value="{{ server.hostname }}"{% endif %}></td>
+        </tr>
+
+        <tr><td>Port (default 8080)</td>
+            <td><input id="id_server_port" name="port" type="text"{% if server %} value="{{ server.port }}"{% endif %}></td>
+        </tr>
+
+        <tr><td>Username (optional)</td>
+            <td><input id="id_server_username" name="username" type="text"{% if server %} value="{{ server.xbmc_username }}"{% endif %}></td>
+        </tr>
+
+        <tr><td>Password (optional)</td>
+            <td><input id="id_server_password" name="password" type="password"{% if server %} value="{{ server.xbmc_password }}"{% endif %}></td>
+        </tr>
+
+        <tr><td>MAC Address (optional)</td>
+            <td><input id="id_server_mac_address" name="mac_address" type="text"{% if server %} value="{{ server.mac_address }}"{% endif %}></td>
+        </tr>
+
+        <tr><td>Position (optional)</td>
+            <td><input id="id_server_position" name="position" type="text"{% if server %} value="{{ server.position }}"{% endif %}></td>
+        </tr>
+
+         <tr>
+            <td><input id="save" type="submit" formaction="{{url_for('xbmc_add_edit_server')}}" formmethod="post" value="{% if server %}Save{% else %}Add{% endif %} server" class="btn btn-info save add_server" style="float:left;"/></td>
+            <td>{% if server %}<input id="delete" type="submit" formaction="{{url_for('.xbmc_delete_server', server_id=server.id)}}" formmethod="post" value="Delete" class="btn btn-info" style="float:right;"/>{% endif %}</td>
+        </tr>
+    </table>
+  </form>
+</div>

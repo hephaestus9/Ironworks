@@ -1,0 +1,79 @@
+{% extends "xbmc/xbmc_base.html" %}
+
+{% block content2 %}
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    {% block content3 %}
+                    {% endblock %}
+                    <div class="applications" class="module" data-module="applications">
+                        <script type="text/javascript" src="{{ url_for('static', filename='js/home/popups.js') }}" charset="utf-8"></script>
+                    </div>
+                  </div>
+                  <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box" style="position:fixed;">
+                      <div class="remote xbmc-remote">
+                        <div class="main-controls">
+                            <div class="direction">
+                                <div class="pad">
+                                    <div class="fa fa-chevron-left left input-button" data-type="Left"></div>
+                                    <div class="fa fa-chevron-up up input-button" data-type="Up"></div>
+                                    <div class="fa fa-chevron-down down input-button" data-type="Down"></div>
+                                    <div class="fa fa-chevron-right right input-button" data-type="Right"></div>
+                                    <div class="fa fa-circle ok input-button" data-type="Select"></div>
+                                </div>
+                            </div>
+                            <div class="buttons">
+                                <div class="fa fa-power-off power-button"></div>
+                                <div class="fa fa-ellipsis-v input-button" data-type="ContextMenu"></div>
+                                <div class="fa fa-info-circle input-button" data-type="Info"></div>
+                            </div>
+                        </div>
+                        <div class="secondary-controls">
+                            <div class="fa fa-reply input-button" data-type="Back"></div>
+                            <div class="fa fa-stop player-button" data-type="Stop"></div>
+                            <div class="fa fa-home input-button" data-type="Home"></div>
+                        </div>
+                    </div>
+                    <div id="browser-player-footer">
+                      <div class="footer-inner">
+                        <div class="footer-left actions-primary">
+                            <span class="browser-player-prev player-button"><i class="fa fa-backward"></i></span>
+                            <span class="browser-player-play player-button"><i class="fa fa-play"></i><i class="fa fa-pause"></i></span>
+                            <span class="browser-player-next player-button"><i class="fa fa-forward"></i></span>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <script>
+
+                      // add/edit/select server
+
+                      $(document).on('click', '#add_server', function() {
+                        $.get('/xbmc_add_server_dialog', function(data) {
+                          var popup = $(data);
+                          $('body').append(popup);
+                          popup.showPopup({ dispose: true });
+                        });
+                      });
+
+                      $(document).on('click', '#edit_server', function() {
+                          //console.log($(this).data('id'));
+                        $.get('/xbmc_edit_server_dialog/' + $(this).data('id'), function(data) {
+                            //console.log(data);
+                          var popup = $(data);
+                          $('body').append(popup);
+                          popup.showPopup({ dispose: true });
+                        });
+
+                      });
+
+                  </script>
+
+
+{% endblock %}

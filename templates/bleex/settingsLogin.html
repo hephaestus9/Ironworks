@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
+<head>
+	<title>{% block page_title %}IRONWORKS{% endblock %}</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ironworks_logo.ico') }}" sizes="64x64" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/ironworks_logo.ico') }}" type="image/x-icon">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='bleextop/themes/default/css/login.css') }}" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bleextop/js/Ext/resources/css/ext-all.css') }}" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='bleextop/themes/default/css/bleextop.css') }}" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bleextop/themes/default/css/icons.css') }}" type="text/css" media="screen" title="no title" charset="utf-8">
+
+
+    <script src="{{ url_for('static', filename='bleextop/js/Bleext/Bleext.js') }}" type="text/javascript" charset="utf-8"></script>	
+    <!--<script type="text/javascript">
+        Bleext.BASE_PATH = "../static/bleextop";
+    </script>-->
+
+    <script type="text/javascript">
+    function processKey(e)
+    {
+        if (null == e)
+            e = window.event ;
+            if (e.keyCode == 13)  {
+                document.getElementById("login").click();
+                return false;
+            }
+    }
+    </script>
+
+    <style>
+      #format { margin-top: 2em; }
+    </style>
+	
+</head>
+<body>
+        <div id="header">
+        <div class="header-bg">
+            <div class="shell">
+              <div id="navigation">
+                <ul>
+                    <li><a href="{{url_for('latestNews')}}" >Home</a></li>
+                    <li><a href="{{url_for('xbmc_home')}}">XBMC</a></li>
+                    <li><a href="{{url_for('freePBX_welcome')}}">freePBX</a></li>
+                    <li><a href="{{url_for('pyemoncms_login')}}">House</a></li>
+                    <li><a href="#">Finances</a></li>
+                    <li><a href="{{url_for('settingsLogin')}}" class="active">Admin</a></li>
+                    <li class="last"><a href="#">Site map</a></li>
+                </ul>
+                <div class="cl">&nbsp;</div>
+              </div>
+              <!--<a href="#" class="subscribe">Subscribe</a>
+              <div class="search">
+                <form action="#" method="post">
+                    <input type="text" class="field blink" value="Message" />
+                    <input type="submit" class="search-btn" value="Send!" />
+                </form>
+              </div>
+              <!--<div class="cl">&nbsp;</div>-->
+            </div>
+        </div>
+
+	<div id="loading-mask"></div>
+	<!--<div id="loading">
+		<img src="{{ url_for('static', filename='bleextop/themes/default/images/loading.gif') }}" width="120" height="120" alt="Loading..." />
+		<p id="msg">Please wait: Loading styles...</p>
+	</div>-->
+	<div>
+	
+	<!--<script type="text/javascript">document.getElementById('msg').innerHTML = 'Please wait: Loading ExtJS files';</script>-->
+	
+	<script src="{{ url_for('static', filename='bleextop/js/Ext/ext-all-debug.js') }}" type="text/javascript" charset="utf-8"></script>
+	<script src="{{ url_for('static', filename='bleextop/js/Bleext/core/Ajax.js') }}" type="text/javascript" charset="utf-8"></script>
+	<script src="{{ url_for('static', filename='bleextop/js/Bleext/core/Log.js') }}" type="text/javascript" charset="utf-8"></script>
+	<script src="{{ url_for('static', filename='bleextop/js/Bleext/desktop/Constants.js') }}" type="text/javascript" charset="utf-8"></script>
+	
+	<script src="{{ url_for('static', filename='bleextop/js/Bleext/overrides/Ext.data.proxy.Ajax.js') }}" type="text/javascript" charset="utf-8"></script>
+	
+	
+	<!--<script type="text/javascript">document.getElementById('msg').innerHTML = 'Please wait: Building user interface.';</script>-->
+	
+	<script src="{{ url_for('static', filename='bleextop/js/Bleext/modules/login/startup.js') }}" type="text/javascript" charset="utf-8"></script>
+	
+	</div>
+	
+</body>
+</html>

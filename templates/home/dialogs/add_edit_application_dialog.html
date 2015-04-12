@@ -1,0 +1,51 @@
+<div id="add_edit_application_dialog" class="dialog">
+
+  <div class="close" style="float:right;cursor:pointer;color:white;">x</div>
+  <h2>{% if application %}Edit{% else %}Add{% endif %} application</h2>
+
+  <form method="" action="">
+
+    {% if application %}
+      <input type="hidden" name="application_id" value="{{ application.id }}">
+    {% endif %}
+
+    <table class="table">
+        <tr><td>Name (required)</td>
+            <td><input id="id_application_name" class="required" name="name" type="text"{% if application %} value="{{ application.name }}"{% endif %}></td>
+        </tr>
+
+        <tr><td>URL (required)</td>
+            <td><input id="id_application_url" class="required" name="url" type="text"{% if application %} value="{{ application.url }}"{% endif %}></td>
+        </tr>
+
+        <tr><td>Description</td>
+            <td><input id="id_application_description" name="description" type="text"{% if application %} value="{{ application.description }}"{% endif %}></td>
+        </tr>
+
+        <tr><td>Icon file name</td>
+            <td>
+                {% if icons %}
+                    <select id="id_application_image" name="image">
+                      <option value=""{% if application.img == '' %} selected="selected"{% endif %}></option>
+                      {% for icon in icons %}
+                        <option value="{{ icon }}"{% if application.img == icon %} selected="selected"{% endif %}>{{ icon }}</option>
+                      {% endfor %}
+                    </select>
+                {% else %}
+                    <input id="id_application_image" type="text" name="image" value="{{ application.img }}">
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr><td>Position</td>
+            <td><input id="id_application_position" name="position" type="text"{% if application %} value="{{ application.position }}"{% endif %}></td>
+        </tr>
+
+        <tr>
+            <td><input id="save" type="submit" formaction="{{url_for('home_add_edit_application')}}" formmethod="post" value="{% if application %}Save{% else %}Add{% endif %} application" class="btn btn-info save add_application" style="float:left;"/></td>
+            <td>{% if application %}<input id="delete" type="submit" formaction="{{url_for('.home_delete_application', application_id=application.id)}}" formmethod="post" value="Delete" class="btn btn-info" style="float:right;"/>{% endif %}</td>
+        </tr>
+    </table>
+  </form>
+</div>
+

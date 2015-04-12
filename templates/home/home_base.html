@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content1 %}
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+                    <div id="navigation">
+                      <ul>
+                        <li><a href="{{url_for('latestNews')}}" class="active">Home</a></li>
+                        <li><a href="{{url_for('xbmc_home')}}">XBMC</a></li>
+                        <li><a href="{{url_for('freePBX_welcome')}}">freePBX</a></li>
+                        <li><a href="{{url_for('pyemoncms_login')}}">Data Management</a></li>
+                        <li><a href="#">Finances</a></li>
+                        <li><a href="{{url_for('settingsLogin')}}">Admin</a></li>
+                        <li class="last"><a href="#">Site map</a></li>
+                      </ul>
+                      <div class="cl">&nbsp;</div>
+                    </div>
+                    <!--<a href="#" class="subscribe">Subscribe</a>-->
+                    <!--<div class="search">
+                      <form action="#" method="post">
+                        <input type="text" class="field blink" value="Message" />
+                        <input type="submit" class="search-btn" value="Send!" />
+                      </form>
+                    </div>-->
+                    <div class="cl">&nbsp;</div>
+                    <!--<h1 id="logo" class="notext" style="width:150px;height:175px"><a href="http://www.maraschinoproject.com/">Maraschino</a></h1>
+                    <h1 id="banner">IRONWORKS</h1>-->
+                    <div class="cl">&nbsp;</div>
+
+                    {% block content2 %}
+                    {% endblock %}
+
+                  </div>
+                  <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box box-tabs" style="font-size:12px;">
+                      <div id="tabs">
+                        <ul>
+                          <li><a href="#popular" class="active">Top</a></li>
+                          <li><a href="#business">Business</a></li>
+                          <li><a href="#tech">Tech</a></li>
+                          <li><a href="#linux">Linux</a></li>
+                        </ul>
+
+                      <div class="cl">&nbsp;</div>
+                      <div class="tabs-content">
+                      <div id="popular">
+                        <ul >
+                        {% for item in googleFeed["items"] %}
+                          <li><a href="{{item["link"]}}">{{item["title"]}}</a></li>
+                        {% endfor %}
+                        </ul>
+                      </div>
+                      <div id="business">
+                        <ul>
+                          {% for item in wallStreetFeed["items"] %}
+                              <li><a href="{{item["link"]}}">{{item["title"]}}</a></li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      <div id="tech">
+                        <ul>
+                          {% for item in techNewsFeed["items"] %}
+                              <li><a href="{{item["link"]}}">{{item["title"]}}</a></li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      <div id="linux">
+                        <ul>
+                          {% for item in linuxNewsFeed["items"] %}
+                              <li><a href="{{item["link"]}}">{{item["title"]}}</a></li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      </div>
+                      </div>
+                    </div>
+
+                    <!--<div class="box">
+                      <h2 class="title">Follow Us!</h2>
+                      <div class="follow-item">
+                        <p><span class="author">Tobias Anderson</span>: Lorem ipsum dolor sit amet, consecteturadipiscing elit. <a href="#">Donec et erat</a> massa, vitae varius massa. <span class="time">3 days ago</span></p>
+                      </div>
+                    </div>
+                    <div class="box">
+                      <h2 class="title">Full width widgetized zone</h2>
+                      <div class="widget-item">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ipsum mauris, molestie at rutrum a, mollis id justo. Etiam at quam dui, nec sollicitudin nibh. Mauris id sem justo.</p>
+                      </div>
+                      <div class="widget-item">
+                        <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus congue metus sed arcu rhoncus ut malesuada velit dictum. Fusce gravida elementum mauris, in faucibus nibh cursus a.</p>
+                      </div>-->
+{% endblock %}

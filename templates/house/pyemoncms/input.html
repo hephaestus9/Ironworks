@@ -1,0 +1,165 @@
+{% extends "house/house.html" %}
+
+{% block content2 %}
+
+    <!--pyemoncms-->
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/themes/default/css/emon.css') }}" rel="stylesheet">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/input/views/input.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/lib/tablejs/table.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/lib/tablejs/custom-table-fields.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/input/views/processlist.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/input/views/process_info.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/feed/feed.js') }}"></script>
+
+    <style>
+    input[type="text"] {
+             width: 88%;
+    }
+
+    #table td:nth-of-type(1) { width:5%;}
+    #table td:nth-of-type(2) { width:10%;}
+    #table td:nth-of-type(3) { width:25%;}
+
+    #table td:nth-of-type(7) { width:30px; text-align: center; }
+    #table td:nth-of-type(8) { width:30px; text-align: center; }
+    #table td:nth-of-type(9) { width:30px; text-align: center; }
+    </style>
+
+                    <div id="sub-nav">
+                      <ul>
+                        <li><a href="{{url_for('pyemon_user')}}">User</a></li>
+                        <li><a href="{{url_for('pyemon_myelectric')}}">My Electric</a></li>
+                        <li><a href="{{url_for('pyemon_node')}}">Node</a></li>
+                        <li><a href="{{url_for('pyemon_input')}}" class="active">Input</a></li>
+                        <li><a href="{{url_for('pyemon_vis')}}">Vis</a></li>
+                        <li><a href="{{url_for('pyemon_dashboard')}}">Dasboard</a></li>
+                        <li class="last"><a href="#">Extras</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li><a href="#">Log Out</a></li>
+                        <li class="last"><a href="{{url_for('pyemon_docs')}}">Docs</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    {% if inputs == [] %}
+                        <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                          <h2 class="title" style="color:white;">No inputs created</h2>
+                          <div class="follow-item">
+                            <p style="color:white;opacity: 0.5;">Inputs is the main entry point for your monitoring device. Configure your device to post values here, you may want to follow the <a href="{{url_for('pyemon_api')}}">Input API helper</a> as a guide for generating your request.</p>
+                          </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                        <h2 class="title" style="color:white;">Inputs</h2>
+
+                        <div class="follow-item">
+                            <table class="table">
+                                <tr><td style="color:white;opacity: 0.5;">Node ID(s)</td>
+                                    <td style="color:white;opacity: 0.5;">Description</td>
+                                    <td style="color:white;opacity: 0.5;">Name</td>
+                                    <td style="color:white;opacity: 0.5;">Process List</td>
+                                    <td style="color:white;opacity: 0.5;">Last Updated</td>
+                                    <td />
+                                    <td style="color:white;opacity: 0.5;">Actions</td>
+                                </tr>
+
+                                {% for item in inputs %}
+                                    {% for input in item %}
+                                        <tr>
+                                            {% if item[input]["nodeid"] == "0" %}
+                                                <td><a href="#" style="float:left">None</a></td>
+                                            {% else %}
+                                                <td style="color:white;opacity: 0.5;">{{item[input]["nodeid"]}}</td>
+                                            {% endif %}
+                                            <td style="color:white;opacity: 0.5;">{{item[input]["description"]}}</td>
+                                            <td style="color:white;opacity: 0.5;">{{input}}</td>
+                                            <td><a href="#">View/Edit</a></td>
+                                            <td style="color:white;opacity: 0.5;">{{time}}</td>
+                                            <td />
+                                            <td><a href="#" style="float:right; padding: 3px"><i class="icon-trash" title="Clear all data points and add input to ignore list."></i></a>
+                                                <a href="#" style="float:left; padding: 3px"><i class="icon-eye-open" title="View Details"></i></a>
+                                                <a href="#" style="float:left; padding: 3px"><i class="icon-download" title="Download Data"></i></a></td>
+                                    {% endfor %}
+                                {% endfor %}
+
+                            </table>
+                        </div>
+                        <br>
+
+                        <div id="table"></div>
+
+
+                    </div>
+                    </div>
+
+                  <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box">
+                      <h2 class="title" style="color:white">My account</h2>
+                      <div class="follow-item">
+                        <p><span class="author">Username</span>:</p>
+                        <p>{{username}}</p>
+                        <a href="#">Switch User</a>
+                        <p>&nbsp;</p>
+                        <p><span class="author">Email</span>:</p>
+                        <p>{{email}}</p>
+                        <a href="#">Edit</a>
+                        <p>&nbsp;</p>
+                        <div id="edit-email-form" class="input-append" style="display:none">
+                                <input class="span2" type="text" style="width:150px">
+                                <button class="btn" type="button">Save</button>
+                        </div>
+                        <div id="change-email-error" class="alert alert-error" style="display:none; width:170px"></div>
+                        <p><span class="author">Write API Key</span>:</p>
+                        <p>{{writeKey}}</p>
+                        <a href="#">Generate New Key</a>
+                        <p>&nbsp;</p>
+                        <p><span class="author">Read API Key</span>:</p>
+                        <p>{{readKey}}</p>
+                        <a href="#">Generate New Key</a>
+                      </div>
+                    </div>
+{% endblock %}

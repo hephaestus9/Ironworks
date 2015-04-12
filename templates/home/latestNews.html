@@ -1,0 +1,87 @@
+{% extends "home/home_base.html" %}
+
+{% block content2 %}
+                    <div id="sub-nav">
+                      <ul>
+                        <li><a href="{{url_for('latestNews')}}" class="active">Latest news</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">TV</a></li>
+                        <li><a href="#">Music</a></li>
+                        <li><a href="{{url_for('applications')}}">Applications</a></li>
+                        <li class="last"><a href="#">Weather</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+
+                    <div id="accordion" style="width: 750px;height: 1100px">
+                      <div class="group">
+                      <h3>HackaDay</h3>
+                      <div>
+                        {% for item in hackadayFeed["items"] %}
+                        <div class="box">
+                          <div class="box-body">
+                            <p class="posted">{{item["published"]}}</p>
+                            <h2>{{item["title"]}}</h2>
+                            {{item["summary"]|safe}}
+                            <a href="{{item["link"]}}" class="notext">Continue reading</a> </div>
+                          <div class="cl">&nbsp;</div>
+                          <!--<a href="#" class="close notext">&nbsp;</a>-->
+                         </div>
+                        {% endfor %}
+                      </div>
+                      </div>
+                      <div class="group">
+                      <h3>io9</h3>
+                      <div>
+                        {% for item in io9Feed["items"] %}
+                        <div class="box">
+                          <div class="box-body">
+                            <p class="posted">{{item["published"]}}</p>
+                            <h2>{{item["title"]}}</h2>
+                            {{item["summary"]|safe}}
+                            <a href="{{item["link"]}}" class="continue">Continue reading</a> </div>
+                          <div class="cl">&nbsp;</div>
+                          <a onclick="$.fancybox.close(true)" class="close notext">&nbsp;</a> </div>
+                        {% endfor %}
+                      </div>
+                      </div>
+                      <div class="group">
+                      <h3>Mental Floss</h3>
+                      <div>
+                        {% for item in mentalFlossFeed["items"] %}
+                        <div class="box">
+                          <div class="box-body">
+                            <p class="posted">{{item["published"]}}</p>
+                            <h2>{{item["title"]}}</h2>
+                            {{item["summary"]|safe}}
+                            <a href="{{item["link"]}}" class="continue">Continue reading</a> </div>
+                          <div class="cl">&nbsp;</div>
+                          <a href="#" class="close notext">&nbsp;</a> </div>
+                        {% endfor %}
+                      </div>
+                      </div>
+                      <div class="group">
+                      <h3>Sparkfun</h3>
+                      <div>
+                        {% for item in sparkfunFeed["items"] %}
+                        <div class="box">
+                          <div class="box-body">
+                            <p class="posted">{{item["published"]}}</p>
+                            <h2>{{item["title"]}}</h2>
+                            {{item["summary"]|safe}}
+                            <a href="{{item["link"]}}" class="continue">Continue reading</a> </div>
+                          <div class="cl">&nbsp;</div>
+                          <a href="#" class="close notext">&nbsp;</a> </div>
+                        {% endfor %}
+                      </div>
+                      </div>
+                    </div>
+{% endblock %}

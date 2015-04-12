@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content1 %}
+
+                    <div id="navigation">
+
+                      <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="search">
+                      <div id="loginContainer">
+                        <a href="#" id="loginButton"><span>Login</span><em></em></a>
+                        <div style="clear:both"></div>
+                            <div id="loginBox">
+
+                                <form id="loginForm" action="{{url_for('process_login')}}" method="post" name="login_form">
+                                    <fieldset id="body">
+                                        <fieldset>
+                                            <label for="email">Email Address</label>
+                                            <input type="text" name="email" id="email" onkeydown="return processKey(event)" />
+                                        </fieldset>
+                                        <fieldset>
+                                            <label for="password">Password</label>
+                                            <input type="password" name="password" id="password" onkeydown="return processKey(event)"/>
+                                        </fieldset>
+                                        <input id="login" name="login" type="button" value="Sign In" onclick="formhash(this.form, this.form.password);" />
+                                        <!--<label for="checkbox"><input type="checkbox" id="checkbox" />Remember me</label>-->
+                                    </fieldset>
+                                    <!--<span><a href="#">Forgot your password?</a></span>-->
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- Login Ends Here -->
+                    </div>
+                    <div class="cl">&nbsp;</div>
+                    <div class="cl">&nbsp;</div>
+
+                  </div>
+                </div>
+              </div>
+
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                  <!-- start: container -->
+		<div class="constructionContainer">
+                    <!--<div class="logo"></div>-->
+			<div class="constructionHeader yellow"></div>
+			<!-- start: content -->
+			<div class="constructionContent" style="color:black;">
+			<h1 id="logo" class="notext" style="width:150px;height:175px"><a href="http://www.maraschinoproject.com/">Maraschino</a></h1>
+                    <h1 id="banner">IRONWORKS</h1>
+				<!--<h1>This website is currently undergoing construction</h1>-->
+				<div class="space20"></div>
+				<h3>We expect an official launch in</h3>
+				<div class="space20"></div>
+				<!-- start: countdownTimerWrap -->
+				<div class="countdownTimerWrap constructionClear">
+					<!-- start: countdownTimer -->
+					<div class="countdownTimer">
+						<div class="days">
+							<div class="number">90</div>
+							<div class="space28"></div>
+							<div class="constructionText">Days</div>
+						</div>
+						<div class="splitter">:</div>
+						<div class="hours">
+							<div class="number">12</div>
+							<div class="space28"></div>
+							<div class="constructionText">Hours</div>
+						</div>
+						<div class="splitter">:</div>
+						<div class="minutes">
+							<div class="number">16</div>
+							<div class="space28"></div>
+							<div class="constructionText">Minutes</div>
+						</div>
+						<div class="splitter">:</div>
+						<div class="seconds">
+							<div class="number">57</div>
+							<div class="space28"></div>
+							<div class="constructionText">Seconds</div>
+						</div>
+					</div>
+					<!-- end: countdownTimer -->
+				</div>
+				<!-- end: countdownTimerWrap -->
+				<div style="constructionClear:both;"></div>
+				<div class="space28"></div>
+				<div class="space28"></div>
+				<div class="space20"></div>
+				<!-- start: progressBar -->
+				<div class="progressBar">
+					<!-- start: progressBarFill -->
+					<div class="progressBarFill green constructionClear">
+						<div class="progressBarFillLeft"></div>
+						<div class="progressBarFillRight"></div>
+						<div class="progressBarFillMiddle">50%</div>
+					</div>
+					<!-- end: progressBarFill -->
+				</div>
+				<!-- end: progressBar -->
+				<div class="space14"></div>
+				<!-- start: progressDescription -->
+			  <div class="progressDescription">
+					<div class="progressDescriptionHeader"></div>
+					<div class="progressDescriptionMiddle">
+						<h1>We're now about 50% done</h1>
+						<p></p>
+					</div>
+					<div class="progressDescriptionFooter"></div>
+				</div>
+				 <!--<a href=""</a>
+				 end: progressDescription -->
+				<div class="space24"></div>
+			</div>
+			<!-- end: content -->
+			<div class="constructionFooter"></div>
+                    </div>
+                    <!--end: container -->
+
+                  </div>
+                  </div>
+                  </div>
+
+
+
+{% endblock %}

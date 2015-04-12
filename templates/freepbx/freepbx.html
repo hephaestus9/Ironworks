@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+
+{% block content1 %}
+
+<!--//	License for all code of this FreePBX module can be found in the license file inside the module directory
+//	Copyright 2013 Schmooze Com Inc.
+//-->
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/js/jquery-1.9.0.min.js') }}"></script>
+    <script type="text/javascript" src="http://docs.sencha.com/extjs/4.2.1/extjs-build/ext-all.js"></script>
+
+
+                    <div id="navigation">
+                      <ul>
+                        <li><a href="{{url_for('latestNews')}}" >Home</a></li>
+                        <li><a href="{{url_for('xbmc_home')}}">XBMC</a></li>
+                        <li><a href="{{url_for('freePBX_welcome')}}" class="active">freePBX</a></li>
+                        <li><a href="{{url_for('pyemoncms_login')}}">Data Management</a></li>
+                        <li><a href="#">Finances</a></li>
+                        <li><a href="{{url_for('settingsLogin')}}">Admin</a></li>
+                        <li class="last"><a href="#">Site map</a></li>
+                      </ul>
+                      <div class="cl">&nbsp;</div>
+                    </div>
+                    <!--<a href="#" class="subscribe">Subscribe</a>-->
+                    <!--<div class="search">
+                      <form action="#" method="post">
+                        <input type="text" class="field blink" value="Message" />
+                        <input type="submit" class="search-btn" value="Send!" />
+                      </form>
+                    </div>-->
+                    <div class="cl">&nbsp;</div>
+                    <!--<h1 id="logo" class="notext" style="width:150px;height:175px"><a href="http://www.maraschinoproject.com/">Maraschino</a></h1>
+                    <h1 id="banner">IRONWORKS</h1>-->
+                    <div class="cl">&nbsp;</div>
+
+    <!--pyemoncms-->
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/themes/default/css/emon.css') }}" rel="stylesheet">
+
+                <div id="sub-nav">
+                  <ul class="dropdown">
+                    <li><a href="#">Admin</a>
+                      <ul>
+                        <li class="last"><a href="#">Administrators</a></li>
+                        <li class="last"><a href="#">Backup & Restore</a></li>
+                        <li class="last"><a href="#">Blacklist</a></li>
+                        <li class="last"><a href="#">Caller ID Lookup Sources</a></li>
+                        <li class="last"><a href="{{url_for('freePBX_custom_destination')}}">Custom Destinations</a></li>
+                        <li class="last"><a href="{{url_for('freePBX_custom_extension')}}">Custom Extensions</a></li>
+                        <li class="last"><a href="http://www.freepbx.org/" target="_blank">FreePBX Support</a></li>
+                        <li class="last"><a href="{{url_for('freePBX_modules')}}">Module Admin</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">Applications</a>
+                      <ul>
+                        <li class="last"><a href="#">Announcements</a></li>
+                        <li class="last"><a href="#">Call Recording</a></li>
+                        <li class="last"><a href="#">Conferences</a></li>
+                        <li class="last"><a href="#">Extensions</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">Connectivity</a>
+                      <ul>
+                        <li class="last"><a href="#">DAHDI Channel DIDs</a></li>
+                        <li class="last"><a href="#">Inbound Routs</a></li>
+                        <li class="last"><a href="#">Outbound Routs</a></li>
+                        <li class="last"><a href="#">Trunks</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">Reports</a>
+                      <ul>
+                        <li class="last"><a href="#">Astrisk Info</a></li>
+                        <li class="last"><a href="#">CDR Reports</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">Advanced Settings</a></li>
+                    <li class="last"><a href="#">Apply Config</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li class="last"><a href="#">&nbsp;</a></li>
+                    <li><a href="#">Log Out</a></li>
+                    <li ><a href="#">Language</a>
+                      <ul>
+                        <li class="last" style="padding-right: 20px"><a href="#" class="active">English</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Bulgarian</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Chinese</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">German</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">French</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Hebrew</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Hungarian</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Italian</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Portugese</a></li>
+                        <li class="last"><a href="#">Portugese (Brasil)</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Russian</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Swedish</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Spanish</a></li>
+                        <li class="last" style="padding-right: 20px"><a href="#">Japanese</a></li>
+                      </ul>
+                    </li>
+                    <li class="last"><a href="http://ironworks.ignorelist.com/freepbx" target="_blank">Original FreePBX</a></li>
+                  </ul>
+                </div>
+            </div>
+          </div>
+        </div>
+
+                    {% block content2 %}
+                    {% endblock %}
+
+{% endblock %}

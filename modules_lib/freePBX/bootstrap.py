@@ -1,0 +1,132 @@
+# -*- coding: utf-8 -*-
+# License for all code of this FreePBX module can be found in the license file inside the module directory
+# Copyright 2013 Schmooze Com Inc.
+#
+
+# *
+# * Bootstrap Settings:
+# *
+# * bootstrap_settings['skip_astman']           - legacy skip_astman, default false
+# *
+# * bootstrap_settings['astman_config']         - default null, config argument when creating new Astman
+# * bootstrap_settings['astman_options']        - default array(), config options creating new Astman
+# *                                               e.g. array('cachemode' => true), see astman documentation
+# * bootstrap_settings['astman_events']         - default 'off' used when connecting, Astman defaults to 'on'
+# *
+# * bootstrap_settings['freepbx_error_handler'] - false don't set it, true use default, named use what is passed
+# *
+# * bootstrap_settings['freepbx_auth']          - true (default) - authorize, false - bypass authentication
+# *
+# * restrict_mods:  false means include all modules functions.inc.php, true skip all modules
+# *                 array of hashes means each module where there is a hash
+# *                 e.g. $restrict_mods = array('core' => true, 'dashboard' => true)
+# *
+# * Settings that are set by bootstrap to indicate the results of what was setup and not:
+# *
+# * bootstrap_settings['framework_functions_included'] = true/false
+# * bootstrap_settings['amportal_conf_initialized'] = true/false
+# * bootstrap_settings['astman_connected'] = false/false
+# * bootstrap_settings['function_modules_included'] = true/false true if one or more were included, false if all were skipped
+# *
+from ironworks import serverTools
+
+
+class Bootstrap():
+
+    def __init__(self, bootstrap_settings, restrictmods):
+        self.logger = serverTools.getLogger()
+        self.freepbx_log = serverTools.getFreePBXLog()
+
+        self.bootstrap_settings = bootstrap_settings
+        self.restrict_mods = restrictmods
+        # Read the freepbx.conf file to ensure consistancy
+        # TODO: Update the freepbx.conf file when changes are made in pyFreePBX
+        try:
+            freePBXConf = open('/etc/freepbx.conf', 'r')
+        except:
+            try:
+                freePBXConf = open('/etc/asterisk/freepbx.conf', 'r')
+            except:
+                self.logger.log("Unable to open 'freepbx.conf'!", "ERROR")
+
+        settings = {}
+        key = ""
+        foundKey = False
+        value = ""
+        foundValue = False
+        j = 0
+        if freePBXConf:
+            for line in freePBXConf:
+                if "[" in line:
+                    for i in range(10, len(line)):
+                        if foundKey == False and foundValue == False and line[i] != '\'':
+                            key += line[i]
+                        if foundKey == False and foundValue == False and line[i + 1] == '\'':
+                            key += line[i]
+                            foundKey = True
+                            j = i + 6
+
+                    for i in range(j, len(line)):
+                        if foundKey and foundValue == False and line[i] != '\'':
+                            value += line[i]
+                        try:
+                            if foundKey and foundValue == False and line[i + 1] == '\'':
+                                foundValue = True
+                        except:
+                            pass
+
+                if foundKey and foundValue:
+                    settings[key] = value
+                key = ""
+                foundKey = False
+                value = ""
+                foundValue = False
+                j = 0
+
+        try:
+            bootstrapped = self.bootstrap_settings['bootstrapped']
+            if bootstrapped:
+                self.logger.log("Bootstrap has already been called once, bad code somewhere", "ERROR")
+                self.freepbx_log("FPBX_LOG_ERROR", "Bootstrap has already been called once, bad code somewhere")
+                return
+        except:
+            self.bootstrap_settings['bootstrapped'] = True
+
+        try:
+            self.bootstrap_settings['skip_astman']
+        except:
+            self.bootstrap_settings['skip_astman'] = False
+
+        try:
+            self.bootstrap_settings['astman_config']
+        except:
+            self.bootstrap_settings['astman_config'] = ""
+
+        try:
+            self.bootstrap_settings['astman_options']
+            if len(self.bootstrap_settings['astman_options']) > 0:
+                pass
+            else:
+                self.bootstrap_settings['astman_options'] = []
+        except:
+            self.bootstrap_settings['astman_options'] = []
+
+        try:
+            self.bootstrap_settings['astman_events']
+        except:
+            self.bootstrap_settings['astman_events'] = "off"
+
+        try:
+            self.bootstrap_settings['freepbx_error_handler']
+        except:
+            self.bootstrap_settings['freepbx_error_handler'] = True
+        try:
+            self.bootstrap_settings['freepbx_auth']
+        except:
+            self.bootstrap_settings['freepbx_auth'] = True
+
+        try:
+            self.bootstrap_settings['cdrdb']
+        except:
+            self.bootstrap_settings['cdrdb'] = False
+

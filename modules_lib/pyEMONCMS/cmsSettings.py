@@ -1,0 +1,517 @@
+# -*- coding: utf-8 -*-
+import hashlib
+import re
+import ast
+import datetime
+from ironworks import serverTools
+
+
+class Settings():
+
+    def __init__(self):
+        self.db = serverTools.getPyEMONCMSDb()
+        self.logger = serverTools.getLogger()
+        self.bleexDb = serverTools.getSystemDb()
+
+        self.db.beginTransaction()
+
+        self.db.checkTable("users", [
+                                        {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                        {"name": "username", "type": "varchar(30)"},
+                                        {"name": "email", "type": "varchar(30)"},
+                                        {"name": "avatar", "type": "varchar(255)"},
+                                        {"name": "apikey_write", "type": "char(128)"},
+                                        {"name": "apikey_read", "type": "char(128)"},
+                                        {"name": "admin", "type": "INT(11) NOT NULL"},
+                                        {"name": "name", "type": "varchar(30) DEFAULT ''"},
+                                        {"name": "location", "type": "varchar(30) DEFAULT ''"},
+                                        {"name": "timezone", "type": "INT(11) DEFAULT 0"},
+                                        {"name": "language", "type": "varchar(5) DEFAULT 'en_EN'"},
+                                        {"name": "bio", "type": "text"}])
+
+        self.db.checkTable("menu_left", [
+                                        {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                        {"name": "name", "type": "text"},
+                                        {"name": "value", "type": "text"}])
+
+        self.db.checkTable("menu_right", [
+                                        {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                        {"name": "name", "type": "text"},
+                                        {"name": "value", "type": "text"}])
+
+        self.db.checkTable("menu_dropdown", [
+                                        {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                        {"name": "name", "type": "text"},
+                                        {"name": "value", "type": "text"}])
+
+        self.db.checkTable("dashboard", [
+                                        {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                        {"name": "userid", "type": "int(11)"},
+                                        {"name": "content", "type": "text"},
+                                        {"name": "height", "type": "int(11)"},
+                                        {"name": "name", "type": "varchar(30) DEFAULT 'no name'"},
+                                        {"name": "alias", "type": "varchar(10)"},
+                                        {"name": "description", "type": "varchar(255) DEFAULT 'no description'"},
+                                        {"name": "main", "type": "tinyint(1) DEFAULT false"},
+                                        {"name": "public", "type": "tinyint(1) DEFAULT false"},
+                                        {"name": "published", "type": "tinyint(1) DEFAULT false"},
+                                        {"name": "showdescription", "type": "tinyint(1) DEFAULT false"}])
+
+        self.db.checkTable("feeds", [
+                                        {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                        {"name": "userid", "type": "int(11)"},
+                                        {"name": "name", "type": "text"},
+                                        {"name": "tag", "type": "text"},
+                                        {"name": "time", "type": "datetime"},
+                                        {"name": "value", "type": "float"},
+                                        {"name": "datatype", "type": "INT(11) NOT NULL"},
+                                        {"name": "public", "type": "tinyint(1) DEFAULT false"},
+                                        {"name": "size", "type": "INT(11)"},
+                                        {"name": "engine", "type": "INT(11) NOT NULL DEFAULT 0"}])
+
+        self.db.checkTable("input", [
+                                        {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                        {"name": "userid", "type": "int(11)"},
+                                        {"name": "name", "type": "text"},
+                                        {"name": "description", "type": "text"},
+                                        {"name": "time", "type": "datetime"},
+                                        {"name": "nodeid", "type": "int(11)"},
+                                        {"name": "processList", "type": "text"},
+                                        {"name": "value", "type": "float"}])
+
+        self.db.checkTable("myelectric", [
+                                        {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                        {"name": "userid", "type": "int(11)"},
+                                        {"name": "data", "type": "text"}])
+
+        self.db.checkTable("node", [
+                                        {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                        {"name": "userid", "type": "int(11)"},
+                                        {"name": "data", "type": "text"}])
+
+        self.db.checkTable("process_list", [
+                                            {"name": "id", "type": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                            {"name": "description", "type": "text"},
+                                            {"name": "arg_type", "type": "varchar(30)"},
+                                            {"name": "function", "type": "varchar(30)"},
+                                            {"name": "num_datafields", "type": "INT"},
+                                            {"name": "datatype", "type": "varchar(30)"},
+                                            {"name": "heading", "type": "varchar(30)"},
+                                            {"name": "engine", "type": "text"}])
+
+        self.db.commitTransaction()
+
+        self.setCMSUsers()
+
+        self.checkCMSDefaults("menu_left", data={"name": 'Node', "value": '{\\\'path\\\': \\\'node/list\\\', \\\'session\\\': \\\'write\\\', \\\'order\\\': \\\'0\\\'}'})
+        self.checkCMSDefaults("menu_left", data={"name": "Input", "value": '{\\\'path\\\': \\\'input/view\\\', \\\'session\\\': \\\'write\\\', \\\'order\\\': \\\'1\\\'}'})
+        self.checkCMSDefaults("menu_left", data={"name": "Feeds", "value": "{\\'path\\': \\'feed/list\\', \\'session\\': \\'write\\', \\'order\\': \\'2\\'}"})
+        self.checkCMSDefaults("menu_left", data={"name": "Vis", "value": "{\\'path\\': \\'vis/list\\', \\'session\\': \\'write\\', \\'order\\': \\'3\\'}"})
+        self.checkCMSDefaults("menu_left", data={"name": "Dashboard", "value": "{\\'path\\': \\'dashboard/view\\', \\'session\\': \\'write\\', \\'order\\': \\'4\\'}"})
+        self.checkCMSDefaults("menu_left", data={"name": "My Electric", "value": "{\\'path\\': \\'myelectric\\', \\'session\\': \\'write\\', \\'order\\': \\'-2\\'}"})
+
+        self.checkCMSDefaults("process_list", data={"description": "Log to feed", "arg_type": "FEEDID", "function": "log_to_feed", "num_datafields": "1", "datatype": "REALTIME", "heading": "Main", "engine": "[\\'PHPFIWA\\', \\'PHPFINA\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "x", "arg_type": "VALUE", "function": "scale", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Calibration"})
+        self.checkCMSDefaults("process_list", data={"description": "+", "arg_type": "VALUE", "function": "offset", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Calibration"})
+        self.checkCMSDefaults("process_list", data={"description": "Power to kWh", "arg_type": "FEEDID", "function": "power_to_kwh", "num_datafields": "1", "datatype": "REALTIME", "heading": "Power", "engine": "[\\'PHPFINA\\', \\'PHPTIMESERIES\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "Power to kWh/d", "arg_type": "FEEDID", "function": "power_to_kwhd", "num_datafields": "1", "datatype": "DAILY", "heading": "Power", "engine": "[\\'PHPTIMESERIES\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "x input", "arg_type": "INPUTID", "function": "times_input", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Input"})
+        self.checkCMSDefaults("process_list", data={"description": "Input on-time", "arg_type": "FEEDID", "function": "input_ontime", "num_datafields": "1", "datatype": "DAILY", "heading": "Input", "engine": "[\\'PHPTIMESERIES\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "Wh increments to kWh/d", "arg_type": "FEEDID", "function": "kwhinc_to_kwhd", "num_datafields": "1", "datatype": "DAILY", "heading": "Power", "engine": "[\\'PHPTIMESERIES\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "update feed @time", "arg_type": "FEEDID", "function": "update_feed_data", "num_datafields": "1", "datatype": "DAILY", "heading": "Input", "engine": "[\\'MYSQL\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "+ input", "arg_type": "INPUTID", "function": "add_input", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Input"})
+        self.checkCMSDefaults("process_list", data={"description": "/ input", "arg_type": "INPUTID", "function": "divide_input", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Input"})
+        self.checkCMSDefaults("process_list", data={"description": "Accumulator", "arg_type": "FEEDID", "function": "accumulator", "num_datafields": "1", "datatype": "REALTIME", "heading": "Misc", "engine": "[\\PHPFINA\\', \\'PHPTIMESERIES\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "Rate of change", "arg_type": "FEEDID", "function": "ratechange", "num_datafields": "1", "datatype": "REALTIME", "heading": "Misc", "engine": "[\\'PHPFIWA\\', \\'PHPFINA\\', \\'PHPTIMESERIES\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "Histogram", "arg_type": "FEEDID", "function": "histogram", "num_datafields": "2", "datatype": "HISTOGRAM", "heading": "Power", "engine": "[\\'MYSQL\\']"})
+
+        # to be reintroduced in post-processing
+        self.checkCMSDefaults("process_list", data={"description": "Heat flux", "arg_type": "FEEDID", "function": "heat_flux", "num_datafields": "1", "datatype": "REALTIME", "heading": "Deleted", "engine": "[\\'PHPFIWA\\', \\'PHPFINA\\', \\'PHPTIMESERIES\\']"})
+
+        # - look into implementation that doesnt need to store the ref feed
+        self.checkCMSDefaults("process_list", data={"description": "Total pulse count to pulse increment", "arg_type": "FEEDID", "function": "pulse_diff", "num_datafields": "1", "datatype": "REALTIME", "heading": "Pulse", "engine": "[\\'PHPFINA\\', \\'PHPTIMESERIES\\']"})
+
+        # - look into state implementation without feed
+        self.checkCMSDefaults("process_list", data={"description": "kWh to Power", "arg_type": "FEEDID", "function": "kwh_to_power", "num_datafields": "1", "datatype": "REALTIME", "heading": "Power", "engine": "[\\'PHPFIWA\\', \\'PHPFINA\\', \\'PHPTIMESERIES\\']"})
+
+        self.checkCMSDefaults("process_list", data={"description": "- input", "arg_type": "INPUTID", "function": "subtract_input", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Input"})
+        self.checkCMSDefaults("process_list", data={"description": "kWh to kWh/d", "arg_type": "FEEDID", "function": "kwh_to_kwhd", "num_datafields": "2", "datatype": "DAILY", "heading": "Power", "engine": "[\\'PHPTIMESERIES\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "Allow positive", "arg_type": "NONE", "function": "allowpositive", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Limits"})
+        self.checkCMSDefaults("process_list", data={"description": "Allow negative", "arg_type": "NONE", "function": "allownegative", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Limits"})
+        self.checkCMSDefaults("process_list", data={"description": "Signed to unsigned", "arg_type": "NONE", "function": "signed2unsigned", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Misc"})
+        self.checkCMSDefaults("process_list", data={"description": "Max value", "arg_type": "FEEDID", "function": "max_value", "num_datafields": "1", "datatype": "DAILY", "heading": "Misc", "engine": "[\\'PHPTIMESERIES\\']"})
+        self.checkCMSDefaults("process_list", data={"description": "Min value", "arg_type": "FEEDID", "function": "min_value", "num_datafields": "1", "datatype": "DAILY", "heading": "Misc", "engine": "[\\'PHPTIMESERIES\\']"})
+
+        self.checkCMSDefaults("process_list", data={"description": " + feed", "arg_type": "FEEDID", "function": "add_feed", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Feed"})  # Klaus 24.2.2014
+        self.checkCMSDefaults("process_list", data={"description": " - feed", "arg_type": "FEEDID", "function": "sub_feed", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Feed"})  # Klaus 24.2.
+        self.checkCMSDefaults("process_list", data={"description": " * feed", "arg_type": "FEEDID", "function": "multiply_by_feed", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Feed"})
+        self.checkCMSDefaults("process_list", data={"description": " / feed", "arg_type": "FEEDID", "function": "divide_by_feed", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Feed"})
+        self.checkCMSDefaults("process_list", data={"description": "Reset to ZERO", "arg_type": "NONE", "function": "reset2zero", "num_datafields": "0", "datatype": "UNDEFINED", "heading": "Misc"})
+
+        self.checkCMSDefaults("process_list", data={"description": "Wh Accumulator", "arg_type": "FEEDID", "function": "wh_accumulator", "num_datafields": "1", "datatype": "REALTIME", "heading": "Main", "engine": "[\\'PHPFINA\\', \\'PHPTIMESERIES\\']"})
+
+        # self.checkCMSDefaults("process_list", data={"description": "save to input", "arg_type": "INPUTID", "function": "save_to_input", "num_datafields": "1", "datatype": "UNDEFINED"})
+
+    def checkCMSDefaults(self, table, data):
+        cursor = self.db.select(table, where=data)
+        if not cursor:
+            try:
+                self.db.beginTransaction()
+                self.db.insert(table, data)
+                self.db.commitTransaction()
+            except Exception as e:
+                self.logger.log(e, "WARNING")
+
+    def checkCMSTable(self, table, data):
+        try:
+            self.db.beginTransaction()
+            self.db.checkTable(table, data)
+            self.db.commitTransaction()
+        except Exception as e:
+            self.logger.log(e, "WARNING")
+
+    def getAllSystemUsers(self):
+        cursor = self.bleexDb.select("users")
+        return cursor
+
+    def getRoll(self, userId):
+        cursor = self.bleexDb.select("user_roles", where={"user_k": str(userId)})
+        if int(cursor[0][1]) == 1:
+            return str(1)
+        else:
+            return str(0)
+
+    def setCMSUsers(self):
+        users = self.getAllSystemUsers()
+        for user in users:
+            name = str(user[4] + " " + user[5])
+            role = self.getRoll(int(user[0]))
+            self.checkCMSDefaults("users", data={"username": user[1],
+                                                "email": user[3],
+                                                "avatar": user[6],
+                                                "admin": role,
+                                                "name": name,
+                                                "apikey_write": self.generateApiKey(user[2]),
+                                                "apikey_read": self.generateApiKey(str(name + user[1]))})
+
+    def generateApiKey(self, value):
+        key = hashlib.md5(value).hexdigest()
+        return key
+
+    def getTimeStamp(self):
+        return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    def getConvertStatus(self, userid):
+        cursor = self.db.select("users", what='convert', where={"id": str(userid)})
+        return cursor[0]
+
+    def getAvatar(self, userid):
+        cursor = self.db.select("users", what='avatar', where={"id": str(userid)})
+        return cursor[0]
+
+    def getUsername(self, userid):
+        cursor = self.db.select("users", what='username', where={"id": str(userid)})
+        return cursor[0]
+
+    def getEmail(self, userid):
+        cursor = self.db.select("users", what='email', where={"id": str(userid)})
+        return cursor[0]
+
+    def getAPIKeyRead(self, userid):
+        cursor = self.db.select("users", what="apikey_read", where={"id": str(userid)})
+        return cursor[0]
+
+    def getIDByReadKey(self, apiReadKey):
+        cursor = self.db.select("users", what="id", where={"apikey_read": str(apiReadKey)})
+        return cursor[0]
+
+    def getAPIKeyWrite(self, userid):
+        cursor = self.db.select("users", what="apikey_write", where={"id": str(userid)})
+        return cursor[0]
+
+    def getIDByWriteKey(self, apiWriteKey):
+        cursor = self.db.select("users", what="id", where={"apikey_write": str(apiWriteKey)})
+        return str(cursor[0][0])
+
+    def getLang(self, userid):
+        cursor = self.db.select("users", what="language", where={"id": str(userid)})
+        return cursor[0]
+
+    def getTimeZone(self, userid):
+        cursor = self.db.select("users", what="timezone", where={"id": str(userid)})
+        return cursor[0]
+
+    def getLocation(self, userid):
+        cursor = self.db.select("users", what="location", where={"id": str(userid)})
+        return cursor[0]
+
+    def getBio(self, userid):
+        cursor = self.db.select("users", what="bio", where={"id": str(userid)})
+        return cursor[0]
+
+    def getUserID(self, username):
+        cursor = self.db.select("users", what="id", where={"username": username})
+        return int(cursor[0][0])
+
+    def getUser(self, userid):
+        cursor = self.db.select("users", where={"id": str(userid)})
+        return cursor[0]
+
+    def getProcessList(self):
+        cursor = self.db.select("process_list")
+        return cursor
+
+    def setConvertStatus(self, userid, conversion):
+        self.db.update("users", data={"conversion": conversion}, where={"id": str(userid)})
+
+    def setAvatar(self, userid, avatar):
+        self.db.update("users", data={"avatar": avatar}, where={"id": str(userid)})
+        cursor = self.db.select("users", what="email", where={"id": str(userid)})
+        self.bleexDb.update("users", data={"avatar": avatar}, where={"email": cursor[0][0]})
+
+    def setUsername(self, userid, username):
+        self.db.update("users", data={"username": username}, where={"id": str(userid)})
+        cursor = self.db.select("users", what="email", where={"id": str(userid)})
+        self.bleexDb.update("users", data={"username": username}, where={"email": cursor[0][0]})
+
+    def setEmail(self, userid, email):
+        self.db.update("users", data={"email": email}, where={"id": str(userid)})
+        cursor = self.db.select("users", what="username", where={"id": str(userid)})
+        self.bleexDb.update("users", data={"email": email}, where={"username": cursor[0][0]})
+
+    def setUserLang(self, userid, lang):
+        self.db.update("users", data={"language": lang}, where={"id": str(userid)})
+
+    def setTimeZone(self, userid, timezone):
+        self.db.update("users", data={"timezone": timezone}, where={"id": str(userid)})
+
+    def setLocation(self, userid, location):
+        self.db.update("users", data={"location": location}, where={"id": str(userid)})
+
+    def setBio(self, userid, bio):
+        self.db.update("users", data={"bio": bio}, where={"id": str(userid)})
+
+    def setAPIKeyRead(self, userid):
+        user = self.db.select("users", where={"id": str(userid)})
+        user = user[0]
+        string = user[4] + user[1]
+        apikey = self.generateApiKey(string)
+        self.db.update("users", data={"apikey_read": apikey}, where={"id": str(userid)})
+        return apikey
+
+    def setAPIKeyWrite(self, userid):
+        user = self.db.select("users", where={"id": str(userid)})
+        user = user[0]
+        string = user[3] + user[1]
+        apikey = self.generateApiKey(string)
+        self.db.update("users", data={"apikey_write": apikey}, where={"id": str(userid)})
+        return apikey
+
+    def setUser(self, data):
+        self.checkCMSDefaults("users", data)
+
+    def setInput(self, userid, name, time, value, description, nodeid, processList):
+        data = {
+                "userid": userid,
+                "name": name,
+                "time": time,
+                "value": value,
+                "description": description,
+                "nodeid": nodeid,
+                "processList": processList}
+        #print data
+        self.db.beginTransaction()
+        self.db.insert("input", data)
+        self.db.commitTransaction()
+        cursor = self.db.select("input", what="id", where=data)
+        return cursor[0]
+
+    def setInputByNode(self, userid, nodeid, name):
+        name = re.sub('[^a-zA-Z0-9\n\.]', ' ', name)
+        data = {"userid": userid,
+                "name": name,
+                "nodeid": nodeid}
+        self.db.beginTransaction()
+        self.db.insertOrUpdate("input", data)
+        self.db.commitTransaction()
+        cursor = self.db.select("input", what="id", where=data)
+        return cursor[0]
+
+    def checkInputId(self, inputid):
+        cursor = self.db.select("input", what="id", where={"id": inputid})
+        if len(cursor) == 1:
+            return True
+        return False
+
+    def setTimeValue(self, inputid, time, value):
+        data = {"time": self.getTimeStamp(),
+                "value": value}
+        self.db.beginTransaction()
+        self.db.update("input", data, where={"id": inputid})
+        self.db.commitTransaction()
+
+    def belongsToUser(self, userid, inputid):
+        result = self.db.select("input", what="id", where={"userid": userid, "inputid": inputid})
+        if len(result) > 0:
+            return True
+        return False
+
+    def setProcessList(self, inputid, processList):
+        self.db.beginTransaction()
+        self.db.update("input", data={"processList": processList}, where={"id": inputid})
+        self.db.commitTransaction()
+
+    def setFields(self, inputid, fields):
+        try:
+            description = re.sub('[^a-zA-Z0-9\n\.]', ' ', fields["description"])
+            descriptionstr = "'description' = '" + description + "'"
+        except:
+            descriptionstr = ""
+
+        try:
+            name = re.sub('[^a-zA-Z0-9\n\.]', ' ', fields["name"])
+            namestr = "'name' = '" + name + "'"
+        except:
+            namestr = ""
+
+        if descriptionstr != "" and namestr != "":
+            fieldstr = descriptionstr + ", " + namestr
+        if descriptionstr != "" and namestr == "":
+            fieldstr = descriptionstr
+        if descriptionstr == "" and namestr != "":
+            fieldstr = namestr
+        if descriptionstr == "" and namestr == "":
+            return False
+
+        result, rowCount = self.db.query("UPDATE input SET " + fieldstr + " WHERE 'id' = '" + str(inputid) + "'", getRowCount=True)
+
+        if rowCount > 0:
+            return True
+        else:
+            return False
+
+    def setProcess(self, process):
+        self.db.beginTransaction()
+        self.db.insertOrUpdate("process_list", data=process)
+        self.db.commitTransaction()
+
+    def getInputs(self, userid):
+        results = self.db.select("input", what="id, nodeid, name, description, processList", where={"userid": str(userid)})
+        for result in results:
+            print result
+            """if result[1] == "null":
+                 result[1] = 0
+            if (!isset($dbinputs[$row['nodeid']])) $dbinputs[$row['nodeid']] = array();
+            $dbinputs[$row['nodeid']][$row['name']] = array('id'=>$row['id'], 'processList'=>$row['processList']);
+
+        return dbinputs"""
+
+    def updateFeedData(self, inputid, time, value):
+        time = self.getTimeStamp()
+        feedname = "feed_" + str(inputid)
+        self.db.beginTransaction()
+        self.db.insertOrUpdate(feedname, data={"time": time, "data": value}, on={"time": time})
+        self.db.commitTransaction()
+
+    def getList(self, userid):
+        inputs = []
+        selectStr = "nodeid,name,description,processList"
+        inputNames = self.db.selectDistinct("input", what='name', where={"userid": userid})
+        print inputNames
+        for name in inputNames:
+            result = self.db.select("input", what=selectStr, where={"name": name[0]}, limit=1)[0]
+            row = {}
+            row[result[1]] = {"nodeid": str(result[0]), "description": result[2], "processList": result[3]}
+            inputs.append(row)
+        print inputs
+        return inputs
+
+    def getProcessName(self, inputid):
+        return self.db.select("input", what="name", where={"id": inputid})
+
+    def getInputProcessList(self, inputid):
+        result = self.db.select("input", what="processList", where={"id": inputid})
+        if len(result) == 0:
+            return False
+        if len(result) == 1:
+            return result[0]
+        if len(result) > 1:
+            return result
+
+    def getProcessLastValue(self, inputid):
+        result = self.db.select("input", what="value", where={"id": inputid})
+        if len(result) == 1:
+            return result[0]
+        else:
+            return False
+
+    def deleteInput(self, userid, inputid):
+        self.db.beginTransaction()
+        self.db.delete("input", where={"userid": userid, "inputid": inputid})
+        self.db.commitTransaction()
+
+    def cleanInputs(self, userid):
+        cleaned = []
+        qresults = self.db.select("input", where={"userid": userid})
+        for qresult in qresults:
+            inputid = qresult[0]
+            if qresult[6] == "null" or qresult[6] == '':
+                self.db.beginTransaction()
+                self.db.delete("input", where={"userid": userid, "id": inputid})
+                self.db.commitTransaction()
+                cleaned.append(inputid)
+        return cleaned
+
+    def setMysqlTimeSeriesHistogram(self, feedname):
+        self.db.checkTable(feedname, [
+                                     {"name": "id", "value": "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"},
+                                     {"name": "time", "value": "INT UNSIGNED"},
+                                     {"name": "data", "value": "float"}], index=["time"], engine="MYISAM")
+
+    def postToFeedHistogram(self, feedname, time, value):
+        self.db.beginTransaction()
+        self.db.insert(feedname, data={"time": time, "data": value})
+        self.db.commitTransaction()
+
+    def updateFeedHistogram(self, feedname, time, value):
+        self.db.beginTransaction()
+        self.db.insertOrUpdate(feedname, data={"time": time, "value": value}, on={"time": time})
+        self.db.commitTransaction()
+
+    def getFeedDataType(self, feedid):
+        result = self.db.select("feeds", what="datatype", where={"id": feedid})
+        return result[0]
+
+    def getFeedDataRange(self, feedname, start, end):
+        result = self.db.select(feedname, what="time, data", between=[start, end], orderby={"time ASC": "none"})
+        return result
+
+    def deleteTable(self, feedname):
+        self.db.beginTransaction()
+        self.db.deleteTable(feedname)
+        self.db.commitTransaction()
+
+    def getFeedSize(self, feedname):
+        queryStr = "SHOW TABLE STATUS LIKE " + feedname
+        result = self.db.query(queryStr)
+        tablesize = result['Data_length'] + result['Index_length']
+        return tablesize
+
+    def getLastFeedValue(self, feedname):
+        result = self.db.select(feedname, what="time, data", orderby={"time Desc": "none"}, limit=1)
+        try:
+            return result[0]
+        except:
+            return False
+
+    def createNode(self, userid, description):
+        self.db.beginTransaction()
+        node = self.db.insert("node", data={"userid": userid, "data": description})
+        self.db.commitTransaction()
+        self.logger.log("Node created nodeid=" + node + ", userid=" + userid + ", data=" + description, "INFO")
+        success = {'success': True, 'nodeId': node}
+        return success
+
+    def query(self, queryStr):
+        result = self.db.query(queryStr)
+        return result

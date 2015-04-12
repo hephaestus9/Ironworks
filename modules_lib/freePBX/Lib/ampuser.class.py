@@ -1,0 +1,72 @@
+# -*- coding: utf-8 -*-
+# License for all code of this FreePBX module can be found in the license file inside the module directory
+# Copyright 2013 Schmooze Com Inc.
+#
+from ironworks import serverTools
+
+
+class Ampuser_Class():
+
+    def __init__(self):
+        self.ampdb = serverTools.getAmpDb()
+        self.logger = serverTools.getLogger()
+        self.username = ""
+        self.password = ""
+        self.extension_high = ""
+        self.extension_low = ""
+        self.deptname = ""
+        self.sections = ""
+
+    def ampuser(self, username):
+        self.username = username
+        user = self.getAmpUser(username)
+        if user:
+            self.password = user['password_sha1']
+            self.extension_high = user['extension_high']
+            self.extension_low = user['extension_low']
+            self.deptname = user['deptname']
+            self.sections = user['sections']
+        else:  # User Doesn't Exist
+            self.password = False
+            self.extension_high = ""
+            self.extension_low = ""
+            self.deptname = ""
+            self.sections = []
+
+    # Give this user full admin access
+    def setAdmin(self):
+        self.extension_high = ""
+        self.extension_low = ""
+        self.deptname = ""
+        self.sections = ["*"]
+
+    def checkPassword(self, password):
+        # Strict checking so false will never match
+        if self.password == password:
+            return True
+        else:
+            return False
+
+    def checkSection(self, section):
+        # If they have * then it means all sections
+        if "*" in self.sections:
+            return True
+        else:
+            if section in self.sections:
+                return True
+        return False
+
+    def getAmpUser(self, username):
+        user = {}
+        whatString = 'password_sha1, extension_high, extension_low, deptname, sections'
+        results = self.db.select("ampusers", what=whatString, where={'username': username})
+        if len(results) > 0:
+            user["username"] = results[0][0]
+            user["password_sha1"] = results[0][1]
+            user["extension_low"] = results[0][2]
+            user["extension_high"] = results[0][3]
+            user["deptname"] = results[0][4]
+            user["sections"] = results[0][5]
+            return user
+        else:
+            return False

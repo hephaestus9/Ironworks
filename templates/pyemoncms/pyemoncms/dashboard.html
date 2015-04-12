@@ -1,0 +1,122 @@
+{% extends "pyemoncms/pyemoncms_base.html" %}
+
+{% block content2 %}
+
+    <!--pyemoncms-->
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/js/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='pyemoncms/themes/default/css/emon.css') }}" rel="stylesheet">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/dashboard/dashboard_langjs.php') }}"></script>
+    <link href="{{ url_for('static', filename='pyemoncms/modules/dashboard/Views/js/widget.css') }}" rel="stylesheet">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/lib/flot/jquery.flot.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/dashboard/Views/js/widgetlist.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/dashboard/Views/js/render.js') }}>"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pyemoncms/modules/feed/feed.js') }}"></script>
+
+    <div id="sub-nav">
+                      <ul class="dropdown">
+                        <li><a href="{{url_for('pyemon_user')}}">User</a></li>
+                        <li><a href="{{url_for('pyemon_node')}}">Node</a></li>
+                        <li><a href="{{url_for('pyemon_input')}}">Input</a></li>
+                        <li><a href="{{url_for('pyemon_vis')}}">Vis</a></li>
+                        <li><a href="{{url_for('pyemon_dashboard')}}" class="active">Dasboard</a></li>
+                        <li class="last"><a href="#">Extras</a>
+                          <ul>
+                            <li class="last"><a href="{{url_for('pyemon_myelectric')}}">My Electric</a></li>
+                          </ul>
+                        </li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li class="last"><a href="#">&nbsp;</a></li>
+                        <li><a href="#">Log Out</a></li>
+                        <li><a href="{{url_for('pyemon_docs')}}">Docs</a></li>
+                        <li class="last"><a href="http://ironworks.ignorelist.com/emoncms" target="_blank">EMONCMS</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <!--==============================content================================-->
+            <div id="main">
+                <div class="shell">
+                  <div id="content" class="left">
+                    <div class="box" style="background-color:RGBA(0,0,0,0.25);">
+                      <h2 class="title" style="color:white;">No dashboards created</h2>
+                      <div class="follow-item">
+                        <div id="table"></div>
+                        <div class="follow-item">
+                            <p style="color:white;opacity: 0.5;">Maybe you would like to add your first dashboard ...</p>
+                            <a href="#" onclick="$.ajax({type: 'POST',url:'dashboard/create.json',success: function(){update();} });">+ Add Dashboard</a>
+                            <!--<i class="icon-plus-sign"></i>-->
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="sidebar" class="right">
+                    <div style="width:300px;height:70px">
+                        <iframe src="http://free.timeanddate.com/clock/i3pk45af/n2342/fn6/fs16/fcfff/tc000/ftb/pa8/tt0/tw1/tm1/th2/ta1/tb4" frameborder="0" width="300" height="58"></iframe>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box">
+                      <h2 class="title" style="color:white">My account</h2>
+                      <div class="follow-item">
+                        <p><span class="author">Username</span>:</p>
+                        <p>{{username}}</p>
+                        <a href="#">Switch User</a>
+                        <p>&nbsp;</p>
+                        <p><span class="author">Email</span>:</p>
+                        <p>{{email}}</p>
+                        <a href="#">Edit</a>
+                        <p>&nbsp;</p>
+                        <div id="edit-email-form" class="input-append" style="display:none">
+                                <input class="span2" type="text" style="width:150px">
+                                <button class="btn" type="button">Save</button>
+                        </div>
+                        <div id="change-email-error" class="alert alert-error" style="display:none; width:170px"></div>
+                        <p><span class="author">Write API Key</span>:</p>
+                        <p>{{writeKey}}</p>
+                        <a href="#">Generate New Key</a>
+                        <p>&nbsp;</p>
+                        <p><span class="author">Read API Key</span>:</p>
+                        <p>{{readKey}}</p>
+                        <a href="#">Generate New Key</a>
+                      </div>
+                    </div>
+{% endblock %}
