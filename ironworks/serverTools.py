@@ -304,10 +304,10 @@ def checkDbKey(prefix, userName):
     try:
         dbPassword = keyring.get_password(prefix + userName, userName)
         if dbPassword is None:
-            password = '8IYdYXdtLb4gZoH3'
+            password = 'your db password'
             keyring.set_password(prefix + userName, userName, password)
             logger.log('Initial database password added to keyring.', "INFO")
-        elif str(dbPassword) == '8IYdYXdtLb4gZoH3':
+        elif str(dbPassword) == 'your db password':
             logger.log('Initial database password in keyring.', "WARNING")
             logger.log('Please change your password.', "WARNING")
         else:
